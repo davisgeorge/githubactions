@@ -40,5 +40,10 @@ jobs:
         with:
           repository: davisgeorge/githubactions
           ref: release
+      - name: push code
+        run: |
+          git add .
+          git commit -m "Auto commit by Github Actions"
+          git push origin
       
 
