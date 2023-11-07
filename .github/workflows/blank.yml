@@ -36,6 +36,8 @@ jobs:
           echo test, and deploy your project.
       - name: create tags in repo 
         run: |
+          git config user.name "davisgeorge"
+          git config user.email "davis.work192@gmail.com"
           git tag test 
           git push origin --tags
       
