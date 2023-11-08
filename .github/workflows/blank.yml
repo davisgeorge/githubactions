@@ -1,15 +1,16 @@
 name: CI cd
 'on':
   push:
-    branches:
-      - main
-      - release
-      - test
-  pull_request:
-    branches:
-      - main
-      - release
-      - test
+    branches: ['main','release','test']
+  #   branches:
+  #     - main
+  #     - release
+  #     - test
+  # pull_request:
+  #   branches:
+  #     - main
+  #     - release
+  #     - test
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,7 +24,7 @@ jobs:
           echo test, and deploy your project.
   dev-relase:
     name: Deploy-Dev
-    # if: ${{ github.ref == 'refs/heads/release' }}
+    if: ${{ github.ref == 'refs/heads/release' }}
 
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +37,7 @@ jobs:
           git branch
   dev-test:
     name: Deploy-test
-    # if: ${{ github.ref == 'refs/heads/test' }}
+    if: ${{ github.ref == 'refs/heads/test' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -46,8 +47,8 @@ jobs:
         run: |
           echo "this is dev-test branch"
           git branch
-
-          
+ 
+    
       # - name: checkout to release
       #   uses: actions/checkout@v3
       #   with:
