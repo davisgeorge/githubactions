@@ -35,14 +35,20 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           
-      - name: checkout to main
+      - name: checkout to release
         uses: actions/checkout@v3
         with:
           ref: test
       - name: push code
         run: |
+          touch new-file.txt
+          echo "Some content" > new-file.txt
           echo "current working branch"
           git branch
+          git add .
+          git commit -m "using github actions"
+          git push origin
+          
 
         
           # git config --global user.email "davis.work192@gmail.com"
