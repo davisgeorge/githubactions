@@ -1,7 +1,5 @@
 name: CI cd
-'on':
-  push:
-    branches: [main,main/release,test]
+'on': [push]
   #   branches:
   #     - main
   #     - release
