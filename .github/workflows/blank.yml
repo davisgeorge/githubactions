@@ -10,7 +10,6 @@ name: CI cd
       - main
       - release
       - test
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,7 +33,18 @@ jobs:
         run: |
           echo "this is dev-relase branch"
           git branch
-
+  dev-test:
+    name: Deploy-test
+    if: github.repository == 'test'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: release
+      - name: this is dev branch
+        run: |
+          echo "this is dev-test branch"
+          git branch
 
           
       # - name: checkout to release
