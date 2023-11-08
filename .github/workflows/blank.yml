@@ -45,6 +45,8 @@ jobs:
           echo "Some content" > new-file.txt
           echo "current working branch"
           git branch
+          git config --global user.email "davis.work192@gmail.com"
+          git config --global user.name "davisgeorge"
           git add .
           git commit -m "using github actions"
           git push origin
