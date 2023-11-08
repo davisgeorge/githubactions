@@ -24,7 +24,7 @@ jobs:
           echo test, and deploy your project.
   dev-relase:
     name: Deploy-Dev
-    if: github.repository == 'release'
+    # if: github.repository == 'release'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
