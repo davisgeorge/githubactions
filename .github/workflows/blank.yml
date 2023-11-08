@@ -10,7 +10,7 @@ name: CI cd
       - master
       - release
       - test
-  workflow_dispatch: null
+
 jobs:
   build:
     runs-on: ubuntu-latest
