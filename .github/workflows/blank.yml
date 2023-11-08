@@ -38,12 +38,11 @@ jobs:
       - name: checkout to main
         uses: actions/checkout@v3
         with:
-          repository: davisgeorge/githubactions
-          ref: release
+          ref: test
       - name: push code
         run: |
           echo "current working branch"
-          git remote -v
+          git branch
 
         
           # git config --global user.email "davis.work192@gmail.com"
