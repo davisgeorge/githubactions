@@ -38,11 +38,11 @@ jobs:
       - name: checkout to release
         uses: actions/checkout@v3
         with:
-          ref: test
+          ref: release
       - name: push code
         run: |
-          touch new-file.txt
-          echo "Some content" > new-file.txt
+          touch release-file.txt
+          echo "Some release content" > release-file.txt
           echo "current working branch"
           git branch
           git config --global user.email "davis.work192@gmail.com"
