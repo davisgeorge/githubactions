@@ -33,6 +33,7 @@ jobs:
       - name: this is dev branch
         run: |
           echo "this is dev-relase branch"
+          git branch
 
 
           
