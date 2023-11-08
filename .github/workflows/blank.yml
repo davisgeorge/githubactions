@@ -42,12 +42,16 @@ jobs:
           ref: release
       - name: push code
         run: |
-          git config --global user.email "davis.work192@gmail.com"
-          git config --global user.name "davisgeorge"
-          git remote set-url origin https://github.com/davisgeorge/githubactions.git
-          git checkout release
-          git add .
-          git commit -m "Auto commit by Github Actions"
-          git push origin
+          echo "current working branch"
+          git remote -v
+
+        
+          # git config --global user.email "davis.work192@gmail.com"
+          # git config --global user.name "davisgeorge"
+          # git remote set-url origin https://github.com/davisgeorge/githubactions.git
+          # git checkout release
+          # git add .
+          # git commit -m "Auto commit by Github Actions"
+          # git push origin
       
 
