@@ -35,11 +35,11 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           
-      # - name: checkout to main
-      #   uses: actions/checkout@v3
-      #   with:
-      #     repository: davisgeorge/githubactions
-      #     ref: release
+      - name: checkout to main
+        uses: actions/checkout@v3
+        with:
+          repository: davisgeorge/githubactions
+          ref: release
       - name: push code
         run: |
           git config --global user.email "davis.work192@gmail.com"
