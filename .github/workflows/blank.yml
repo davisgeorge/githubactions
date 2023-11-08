@@ -23,7 +23,7 @@ jobs:
           echo test, and deploy your project.
   dev-relase:
     name: Deploy-Dev
-    if: ${{ github.ref == 'refs/heads/release' }}
+    # if: ${{ github.ref == 'refs/heads/release' }}
 
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +36,7 @@ jobs:
           git branch
   dev-test:
     name: Deploy-test
-    if: ${{ github.ref == 'refs/heads/test' }}
+    # if: ${{ github.ref == 'refs/heads/test' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
