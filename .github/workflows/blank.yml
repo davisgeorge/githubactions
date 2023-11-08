@@ -1,44 +1,121 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
+name: CI cd
+'on':
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+    branches:
+        - 'main'
+        - 'release'
+        - 'test'
+  # pull_request:
+  #   branches:
+  #     - main
+  #     - release
+  #     - test
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
+        run: 'echo Hello, world!'
       - name: Run a multi-line script
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-      - name: create tags in repo 
+  dev-relase:
+    name: Deploy-Dev
+    if: ${{ github.ref == 'refs/heads/release' }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: release
+      - name: this is dev branch
         run: |
-          git config user.name "davisgeorge"
-          git config user.email "davis.work192@gmail.com"
-          git tag test 
-          git push origin --tags
+          echo "this is dev-relase branch"
+          git branch
+  dev-test:
+    name: Deploy-test
+    if: ${{ github.ref == 'refs/heads/test' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: release
+      - name: this is dev branch
+        run: |
+          echo "this is dev-test branch"
+          git branch
+ 
+    
+      # - name: checkout to release
+      #   uses: actions/checkout@v3
+      #   with:
+      #     ref: release
+      # - name: push code
+      #   run: |
+      #     touch release-file.txt
+      #     echo "Some release content" > release-file.txt
+      #     echo "current working branch"
+      #     git branch
+      #     git config --global user.email "davis.work192@gmail.com"
+      #     git config --global user.name "davisgeorge"
+      #     git add .
+      #     git commit -m "using github actions"
+      #     git push origin
+          
+
+        
+          # git config --global user.email "davis.work192@gmail.com"
+          # git config --global user.name "davisgeorge"
+          # git remote set-url origin https://github.com/davisgeorge/githubactions.git
+          # git checkout release
+          # git add .
+          # git commit -m "Auto commit by Github Actions"
+          # git push origin
+      
+
+# # This is a basic workflow to help you get started with Actions
+
+# name: CI
+
+# # Controls when the workflow will run
+# on:
+#   # Triggers the workflow on push or pull request events but only for the "main" branch
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+
+#   # Allows you to run this workflow manually from the Actions tab
+#   workflow_dispatch:
+
+# # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# jobs:
+#   # This workflow contains a single job called "build"
+#   build:
+#     # The type of runner that the job will run on
+#     runs-on: ubuntu-latest
+
+#     # Steps represent a sequence of tasks that will be executed as part of the job
+#     steps:
+#       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#       - uses: actions/checkout@v3
+
+#       # Runs a single command using the runners shell
+#       - name: Run a one-line script
+#         run: echo Hello, world!
+
+#       # Runs a set of commands using the runners shell
+#       - name: Run a multi-line script
+#         run: |
+#           echo Add other actions to build,
+#           echo test, and deploy your project.
+#       - name: create tags in repo 
+#         run: |
+#           git config user.name "davisgeorge"
+#           git config user.email "davis.work192@gmail.com"
+#           git tag test 
+#           git push origin --tags
       
 
