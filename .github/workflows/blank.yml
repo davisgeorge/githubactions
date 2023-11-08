@@ -1,7 +1,10 @@
 name: CI cd
 'on':
   push:
-    branches: ['main','release','test']
+    branches: 
+        - main
+        - release
+        - test
   #   branches:
   #     - main
   #     - release
