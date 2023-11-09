@@ -20,25 +20,27 @@ jobs:
       - name: Generate Git Tag
         id: generate_tag
         run: |
-          VERSION_PREFIX="v"
 
-          VERSION_MAJOR_MINOR="1.0"
+          echo "$GITHUB_ACTOR"
+        #   VERSION_PREFIX="v"
 
-          VERSION_PATCH=$(git tag --list
-          "${VERSION_PREFIX}${VERSION_MAJOR_MINOR}" --sort=-version:refname |
-          head -n 1 | grep -oE '[0-9]+$')
+        #   VERSION_MAJOR_MINOR="1.0"
 
-          if [ -z "$VERSION_PATCH" ]; then
-            VERSION_PATCH=0
-          else
-            VERSION_PATCH=$((VERSION_PATCH + 1))
-          fi
+        #   VERSION_PATCH=$(git tag --list
+        #   "${VERSION_PREFIX}${VERSION_MAJOR_MINOR}" --sort=-version:refname |
+        #   head -n 1 | grep -oE '[0-9]+$')
 
-          NEW_TAG="${VERSION_PREFIX}${VERSION_MAJOR_MINOR}.${VERSION_PATCH}"
+        #   if [ -z "$VERSION_PATCH" ]; then
+        #     VERSION_PATCH=0
+        #   else
+        #     VERSION_PATCH=$((VERSION_PATCH + 1))
+        #   fi
 
-          echo "Generated new tag: $NEW_TAG"
+        #   NEW_TAG="${VERSION_PREFIX}${VERSION_MAJOR_MINOR}.${VERSION_PATCH}"
 
-          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+        #   echo "Generated new tag: $NEW_TAG"
+
+        #   echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
   dev-relase:
     name: Deploy-Dev
     if: '${{ github.ref == ''refs/heads/release'' }}'
