@@ -16,8 +16,8 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-           - name: Generate Git Tag
-      - name: null
+          
+      - name: Generate Git Tag
         id: generate_tag
         run: |
           VERSION_PREFIX="v"
