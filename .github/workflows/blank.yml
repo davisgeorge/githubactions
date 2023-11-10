@@ -62,7 +62,7 @@ jobs:
 
 
 
-         dev-relase:
+  dev-relase:
     name: Deploy-Dev
     if: '${{ github.ref == ''refs/heads/release'' }}'
     runs-on: ubuntu-latest
