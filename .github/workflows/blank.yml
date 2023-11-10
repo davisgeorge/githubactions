@@ -32,33 +32,37 @@ jobs:
         
       
     
+   
       - name: Fetch existing tags
         run: git fetch --tags
 
       - name: Get the latest tag
         id: get_latest_tag
-        run: |
-          latest_tag=$(git describe --tags --always --abbrev=0)
-          echo "::set-output name=tag::$latest_tag"
+        run: echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
 
-      - name: Extract version components
-        id: extract_version
-        run: |
-          IFS='.' read -ra version <<< "${{ steps.get_latest_tag.outputs.tag }}"
-          echo "::set-output name=major::${version[0]}"
-          echo "::set-output name=minor::${version[1]}"
-          echo "::set-output name=patch::${version[2]}"
+      - name: Parse the latest tag version
+        id: parse_tag
+        run: echo "::set-output name=major_minor_patch::$(echo "${{ steps.get_latest_tag.outputs.tag }}" | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\1 \2 \3/')"
 
       - name: Increment patch version
         id: increment_patch
-        run: echo "::set-output name=patch::$((${{ steps.extract_version.outputs.patch }} + 1))"
+        run: echo "::set-output name=new_patch::$(echo "$(( $(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | cut -d' ' -f3) + 1 ))")"
 
       - name: Create new tag
+        id: create_tag
         run: |
-          new_tag="${{ steps.extract_version.outputs.major }}.${{ steps.extract_version.outputs.minor }}.${{ steps.increment_patch.outputs.patch }}"
-          git tag -a -m "Release $new_tag" $new_tag
-          git push --tags
-  dev-relase:
+          new_tag=$(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | awk '{ printf "v%d.%d.%d", $1, $2, '${{ steps.increment_patch.outputs.new_patch }}' }')
+          git tag -a -m "Versioned tag $new_tag" $new_tag
+
+      - name: Push new tag
+        run: git push --tags
+
+
+
+
+
+
+         dev-relase:
     name: Deploy-Dev
     if: '${{ github.ref == ''refs/heads/release'' }}'
     runs-on: ubuntu-latest
