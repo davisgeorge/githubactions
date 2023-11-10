@@ -19,6 +19,7 @@ jobs:
       - name: Get latest tag
         id: get_tag
         run: |
+          git fetch --tags
           latest_tag=$(git for-each-ref --sort=-taggerdate --format '%(refname:short)' refs/tags | head -n 1)
           echo "Latest tag is $latest_tag"
           echo "TAG=${latest_tag}" >> $GITHUB_ENV
