@@ -16,9 +16,9 @@ jobs:
       - name: Get latest tag
         id: get_tag
         run: |
-          # latest_tag=$(git fetch --tags)
-          # echo "Latest tag is $latest_tag"
-          # echo "TAG=${latest_tag}" >> $GITHUB_ENV
+          latest_tag=$(git fetch --tags)
+          echo "Latest tag is $latest_tag"
+          echo "TAG=${latest_tag}" >> $GITHUB_ENV
           # echo "TAG=v1.0.0" >> $GITHUB_ENV
           # git describe --abbrev=0 --tags
           # git fetch --tags
