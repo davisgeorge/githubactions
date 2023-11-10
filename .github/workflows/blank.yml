@@ -1,68 +1,87 @@
-
 name: CI CD Pipeline
-
+ 
 on:
   workflow_dispatch:
     inputs:
       branch:
-        description: features/github_action
+        description: Enter the branch name
         required: true
-
+ 
 jobs:
   build_deploy:
     runs-on: ubuntu-latest
-
+ 
     steps:
     - name: Checkout  
       uses: actions/checkout@v3
-      with:
-        repository: Zensar-FXCM-Project/Trulioo
-        ref: ${{ github.event.inputs.branch }}
-        
-    - name: Set Environment variables
-      id: env-variables
+      # with:
+        # repository: Zensar-FXCM-Project/Trulioo
+        # ref: ${{ github.event.inputs.branch }}
+       
+    # - name: Set Environment variables
+    #   id: env-variables
+    #   run: |
+    #     if [[ ${{github.ref}} == "refs/heads/${{ github.event.inputs.branch }}" ]]; then
+    #       echo "ENV_NAME=dev" >> $GITHUB_ENV
+    #       echo "AWS_REGION=eu-west-2" >> $GITHUB_ENV
+    #       echo "APP_NAME=backendservercicd" >> $GITHUB_ENV
+    #       echo "EB_ENV_NAME=backendservercicd-env" >> $GITHUB_ENV
+    #       echo "BUILD_FOLDER=fxcm_trulioo_dev" >> $GITHUB_ENV
+    #       echo "TAG_NAME=v1.0.0" >> $GITHUB_ENV
+    #       echo "TAG_MESSAGE=Tag for version 1.0.0" >> $GITHUB_ENV  
+    #       echo "REPO_OWNER=Zensar-FXCM-Project" >> $GITHUB_ENV
+    #       echo "REPO_NAME=Trulioo" >> $GITHUB_ENV
+    #     else
+    #       echo "ENV_VAR=qa" >> $GITHUB_ENV
+    #       echo "AWS_REGION=eu-west-2" >> $GITHUB_ENV
+    #     fi
+    # - name: Set up AWS CLI
+    #   uses: aws-actions/configure-aws-credentials@v3
+    #   with:
+    #     aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+    #     aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+    #     aws-region: ${{env.AWS_REGION}}
+       
+    # - name: EBS Build
+    #   uses: Zensar-FXCM-Project/SharedLibrary_GithubActions/.github/actions/ebs-build-test/@main
+       
+    # - name: Deploy to EBS
+    #   uses: Zensar-FXCM-Project/SharedLibrary_GithubActions/.github/actions/ebs-deploy-test/@main
+ 
+    - name: Tag Creation
+      id: get_tag
       run: |
-        if [[ ${{github.ref}} == "refs/heads/${{ github.event.inputs.branch }}" ]]; then
-          echo "ENV_NAME=dev" >> $GITHUB_ENV
-          echo "AWS_REGION=eu-west-2" >> $GITHUB_ENV
-          echo "APP_NAME=backendservercicd" >> $GITHUB_ENV
-          echo "EB_ENV_NAME=backendservercicd-env" >> $GITHUB_ENV
-          echo "BUILD_FOLDER=fxcm_trulioo_dev" >> $GITHUB_ENV
-          echo "TAG_NAME=v1.0.0" >> $GITHUB_ENV
-          echo "TAG_MESSAGE=Tag for version 1.0.0" >> $GITHUB_ENV  
-          echo "REPO_OWNER=Zensar-FXCM-Project" >> $GITHUB_ENV
-          echo "REPO_NAME=Trulioo" >> $GITHUB_ENV
-        else 
-          echo "ENV_VAR=qa" >> $GITHUB_ENV
-          echo "AWS_REGION=eu-west-2" >> $GITHUB_ENV
-        fi
-    - name: Set up AWS CLI
-      uses: aws-actions/configure-aws-credentials@v3
-      with:
-        aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-        aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-        aws-region: ${{env.AWS_REGION}}
-        
-    - name: EBS Build
-      uses: Zensar-FXCM-Project/SharedLibrary_GithubActions/.github/actions/ebs-build-test/@main
-        
-    - name: Deploy to EBS
-      uses: Zensar-FXCM-Project/SharedLibrary_GithubActions/.github/actions/ebs-deploy-test/@main
-        
+          git fetch --tags
+          latest_tag=$(git for-each-ref --sort=-taggerdate --format '%(refname:short)' refs/tags | head -n 1)
+          echo "Latest tag is $latest_tag"
+          echo "TAG=${latest_tag}" >> $GITHUB_ENV
+          git config --global user.email "actions@github.com"
+          git config --global user.name "${{ github.actor }}"
+          IFS='.' read -ra parts <<< "${{ env.TAG }}"
+          major="${parts[0]}"
+          minor="${parts[1]}"
+          patch="${parts[2]}"
+          new_patch=$((patch + 1))
+          new_version="${major}.${minor}.${new_patch}"
+          echo "New version is $new_version"
+          echo "NEW_TAG=${new_version}" >> $GITHUB_ENV
+          git tag -a "${{ env.NEW_TAG }}" -m "Release ${{ env.NEW_TAG }}"
+          git push origin "${{ env.NEW_TAG }}"
+       
     # - name: Create Tag
     #   run: |
     #     git config user.email "actions@github.com"
     #     git config user.name "GitHub Actions"
     #     git tag -a v1.0.2 -m "Test Tag"
     #     git push origin --tags
-        
-    
+       
+   
  
     # - name: Checkout
     #   uses: actions/checkout@v4
     #   with:
     #     fetch-depth: 0
-
+ 
     # - name: Push to Main
     #   run: |
     #       git config --global user.email "actions@github.com"
@@ -73,25 +92,25 @@ jobs:
     #       git merge features/github_action
     #       git push origin release_uat --force
    
-
+ 
 # name: Release Workflow
-
+ 
 # on:
 #  workflow_dispatch:
 #   # push:
 #   #   branches:
 #   #     - main
-
+ 
 # jobs:
 #   release:
 #     runs-on: ubuntu-latest
-
+ 
 #     steps:
 #       - name: Checkout code
 #         uses: actions/checkout@v2
 #       # - name: Fetch tags
 #       #   run: git fetch --tags
-
+ 
 #       - name: Get latest tag
 #         id: get_tag
 #         run: |
@@ -99,12 +118,12 @@ jobs:
 #           latest_tag=$(git for-each-ref --sort=-taggerdate --format '%(refname:short)' refs/tags | head -n 1)
 #           echo "Latest tag is $latest_tag"
 #           echo "TAG=${latest_tag}" >> $GITHUB_ENV
-
+ 
 #       - name: Set up Git
 #         run: |
 #           git config --global user.email "actions@github.com"
 #           git config --global user.name "GitHub Actions"
-
+ 
 #       - name: Calculate new version
 #         id: version
 #         run: |
@@ -112,23 +131,23 @@ jobs:
 #           major="${parts[0]}"
 #           minor="${parts[1]}"
 #           patch="${parts[2]}"
-          
+         
 #           # Increment the version based on your versioning strategy
 #           # For example, incrementing the patch version:
 #           new_patch=$((patch + 1))
 #           new_version="${major}.${minor}.${new_patch}"
-          
+         
 #           echo "New version is $new_version"
 #           echo "NEW_TAG=${new_version}" >> $GITHUB_ENV
-
+ 
 #       - name: Create new tag
 #         run: |
 #           git tag -a "${{ env.NEW_TAG }}" -m "Release ${{ env.NEW_TAG }}"
 #           git push origin "${{ env.NEW_TAG }}"
-
-
-
-
+ 
+ 
+ 
+ 
 # # name: CI cd
 # # on:
 # #   # workflow_dispatch:
@@ -139,9 +158,9 @@ jobs:
 # #     #   environment:
 # #     #     description: 'The environment to deploy to'
 # #     #     required: true
-      
-
-
+     
+ 
+ 
 # #   push:
 # #     branches:
 # #       - main
@@ -151,13 +170,13 @@ jobs:
 # #   build:
 # #     runs-on: ubuntu-latest
 # #     steps:
-# #       - name: checkout 
+# #       - name: checkout
 # #         uses: actions/checkout@v3
 # #         with:
 # #           repository: davisgeorge/githubactions
 # #           ref: ${{github.ref}}
 # #           # ref: ${{ github.event.inputs.branch }}
-          
+         
          
 # #       - name: Get the latest tag
 # #         id: get_latest_tag
@@ -165,16 +184,16 @@ jobs:
 # #           latest_tag=$(git describe --abbrev=0 --tags)
 # #           echo "Latest tag is $latest_tag"
 # #           echo "TAG=${latest_tag}" >> $GITHUB_ENV
-
-
+ 
+ 
 # #       # - name: Parse the latest tag version
 # #       #   id: parse_tag
 # #       #   run: echo "::set-output name=major_minor_patch::$(echo "${{ steps.get_latest_tag.outputs.tag }}" | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\1 \2 \3/')"
-
+ 
 # #       # - name: Increment patch version
 # #       #   id: increment_patch
 # #       #   run: echo "::set-output name=new_patch::$(echo "$(( $(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | cut -d' ' -f3) + 1 ))")"
-
+ 
 # #       # - name: Create new tag
 # #       #   id: create_tag
 # #       #   run: |
@@ -182,15 +201,15 @@ jobs:
 # #       #     git config --global user.name "davisgeorge"
 # #       #     new_tag=$(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | awk '{ printf "v%d.%d.%d", $1, $2, '${{ steps.increment_patch.outputs.new_patch }}' }')
 # #       #     git tag -a -m "Versioned tag $new_tag" $new_tag
-
+ 
 # #       # - name: Push new tag
 # #       #   run: git push --tags
-
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
+ 
 # #   dev-relase:
 # #     name: Deploy-Dev
 # #     if: '${{ github.ref == ''refs/heads/release'' }}'
