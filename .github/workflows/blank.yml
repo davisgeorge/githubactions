@@ -20,7 +20,8 @@ jobs:
           # echo "Latest tag is $latest_tag"
           # echo "TAG=${latest_tag}" >> $GITHUB_ENV
           echo "TAG=v1.0.0" >> $GITHUB_ENV
-          git describe --abbrev=0 --tags
+          # git describe --abbrev=0 --tags
+          git tag -l
 
       - name: Set up Git
         run: |
