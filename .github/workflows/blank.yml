@@ -33,7 +33,7 @@ jobs:
       
     
    
-      - name: Fetch existing tags
+     
       - name: Get latest tag
         id: get_tag
         run: echo ::set-output name=TAG::$(git describe --tags --abbrev=0)
