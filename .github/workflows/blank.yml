@@ -28,10 +28,7 @@ jobs:
           # ref: ${{ github.event.inputs.branch }}
           
             
-      - name: Run a one-line script
-        run: |
-          'echo Hello, world!'
-          echo  ${{ github.event.inputs.branch }}
+    
         
       - name: Run a multi-line script
         run: |
