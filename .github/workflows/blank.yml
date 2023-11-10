@@ -27,29 +27,13 @@ jobs:
           ref: ${{github.ref}}
           # ref: ${{ github.event.inputs.branch }}
           
-            
-    
-        
-      
-    
-   
-     
-      - name: Get latest tag
-        id: get_tag
-        run: echo ::set-output name=TAG::$(git describe --tags --abbrev=0)
-  
-      - name: Increase patch version
-        id: semver
-        run: echo ::set-output name=NEW_TAG::$(node -e "console.log(require('semver').inc('${{ steps.get_tag.outputs.TAG }}', 'patch'))")
-  
-      - name: Create new tag
-        run: git tag ${{ steps.semver.outputs.NEW_TAG }}
-        
-      - name: Push new tag
-        run: git push origin ${{ steps.semver.outputs.NEW_TAG }}    
-      # - name: Get the latest tag
-      #   id: get_latest_tag
-      #   run: echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
+         
+      - name: Get the latest tag
+        id: get_latest_tag
+        run: |
+           echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
+           echo ${{ steps.get_latest_tag.outputs.tag }}
+          
 
       # - name: Parse the latest tag version
       #   id: parse_tag
