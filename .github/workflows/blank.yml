@@ -37,9 +37,8 @@ jobs:
           
       - name: Generate Git Tag
         id: generate_tag
-        shell: bash
         run: |
-          # VERSION=""
+          VERSION=""
 
           #get parameters
           while getopts v: flag
