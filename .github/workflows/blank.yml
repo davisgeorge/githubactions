@@ -31,11 +31,10 @@ jobs:
       - name: Get the latest tag
         id: get_latest_tag
         run: |
-           echo "tag=$(git tag)" >> $GITHUB_ENV
-           echo "The latest tag is ${{ env.tag }}"
-           echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
-           echo ${{ steps.get_latest_tag.outputs.tag }}
-          
+          latest_tag=$(git describe --abbrev=0 --tags)
+          echo "Latest tag is $latest_tag"
+          echo "TAG=${latest_tag}" >> $GITHUB_ENV
+
 
       # - name: Parse the latest tag version
       #   id: parse_tag
