@@ -13,8 +13,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Fetch tags
-        run: git fetch --tags
+      # - name: Fetch tags
+      #   run: git fetch --tags
 
       - name: Get latest tag
         id: get_tag
@@ -22,14 +22,6 @@ jobs:
           latest_tag=$(git for-each-ref --sort=-taggerdate --format '%(refname:short)' refs/tags | head -n 1)
           echo "Latest tag is $latest_tag"
           echo "TAG=${latest_tag}" >> $GITHUB_ENV
-
-          # latest_tag=$(git fetch --tags)
-          # echo "Latest tag is $latest_tag"
-          # echo "TAG=${latest_tag}" >> $GITHUB_ENV
-          # echo "TAG=v1.0.0" >> $GITHUB_ENV
-          # git describe --abbrev=0 --tags
-          # git fetch --tags
-          # git describe --tags --abbrev=0 --always
 
       - name: Set up Git
         run: |
