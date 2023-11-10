@@ -31,38 +31,22 @@ jobs:
     
         
       
-      - name: Checkout code
-        uses: actions/checkout@v2
-  
+    
       - name: Fetch tags
         run: git fetch --tags
   
-      - name: Get latest tag
-        id: get-latest-tag
+      - name: Create and push new tag
         run: |
           tagFmt="^v?[0-9]+\.[0-9]+\.[0-9]+$"
-          latest_tag=$(git for-each-ref --sort=-v:refname --format '%(refname:lstrip=2)' | grep -E "$tagFmt" | head -n 1)
-          echo "::set-output name=tag::$latest_tag"
-  
-      - name: Extract major version
-        id: extract-major-version
-        run: |
-          tag="$INPUT_TAG"  # Use the tag from the previous step
-          [[ "$tag" =~ ^([0-9]+) ]]
-          major=${BASH_REMATCH[1]}
-          echo "::set-output name=major::$major"
-  
-      - name: Create new tag
-        id: create-new-tag
-        run: |
-          major="$INPUT_MAJOR"  # Use the major version from the previous step
-          git tag -a -m "New tag based on $INPUT_TAG" "$major"
-          echo "::set-output name=new-tag::$major"
-  
-      - name: Push new tag
-        run: |
-          new_tag="$INPUT_NEW_TAG"  # Use the new tag from the previous step
-          git push origin "$new_tag"
+          fetchedTag=$(git for-each-ref --sort=-v:refname --format '%(refname:lstrip=2)' | grep -E "$tagFmt" | head -n 1)
+          
+          if [[ $fetchedTag =~ ^([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            newTag="${BASH_REMATCH[1]}"
+            git tag -a "$newTag" -m "Tag $newTag created"
+            git push origin "$newTag"
+          else
+            echo "No valid tag found."
+          fi"
 
   dev-relase:
     name: Deploy-Dev
