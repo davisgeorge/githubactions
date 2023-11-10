@@ -1,86 +1,137 @@
-name: CI cd
+name: Release Workflow
+
 on:
-  # workflow_dispatch:
-    # inputs:
-    #   branch:
-    #     description: 'The branch to build'
-    #     required: true
-    #   environment:
-    #     description: 'The environment to deploy to'
-    #     required: true
-      
-
-
   push:
     branches:
       - main
-      - release
-      - test
+
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
+
     steps:
-      - name: checkout 
-        uses: actions/checkout@v3
-        with:
-          repository: davisgeorge/githubactions
-          ref: ${{github.ref}}
-          # ref: ${{ github.event.inputs.branch }}
-          
-         
-      - name: Get the latest tag
-        id: get_latest_tag
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get latest tag
+        id: get_tag
         run: |
           latest_tag=$(git describe --abbrev=0 --tags)
           echo "Latest tag is $latest_tag"
           echo "TAG=${latest_tag}" >> $GITHUB_ENV
 
-
-      # - name: Parse the latest tag version
-      #   id: parse_tag
-      #   run: echo "::set-output name=major_minor_patch::$(echo "${{ steps.get_latest_tag.outputs.tag }}" | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\1 \2 \3/')"
-
-      # - name: Increment patch version
-      #   id: increment_patch
-      #   run: echo "::set-output name=new_patch::$(echo "$(( $(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | cut -d' ' -f3) + 1 ))")"
-
-      # - name: Create new tag
-      #   id: create_tag
-      #   run: |
-      #     git config --global user.email "davis.work192@gmail.com"
-      #     git config --global user.name "davisgeorge"
-      #     new_tag=$(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | awk '{ printf "v%d.%d.%d", $1, $2, '${{ steps.increment_patch.outputs.new_patch }}' }')
-      #     git tag -a -m "Versioned tag $new_tag" $new_tag
-
-      # - name: Push new tag
-      #   run: git push --tags
-
-
-
-
-
-
-  dev-relase:
-    name: Deploy-Dev
-    if: '${{ github.ref == ''refs/heads/release'' }}'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: release
-      - name: this is dev branch
+      - name: Set up Git
         run: |
-          echo "this is dev-relase branch"
-          git branch
-  dev-test:
-    name: Deploy-test
-    if: '${{ github.ref == ''refs/heads/test'' }}'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: release
-      - name: this is dev branch
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Calculate new version
+        id: version
         run: |
-          echo "this is dev-test branch"
-          git branch
+          IFS='.' read -ra parts <<< "${{ env.TAG }}"
+          major="${parts[0]}"
+          minor="${parts[1]}"
+          patch="${parts[2]}"
+          
+          # Increment the version based on your versioning strategy
+          # For example, incrementing the patch version:
+          new_patch=$((patch + 1))
+          new_version="${major}.${minor}.${new_patch}"
+          
+          echo "New version is $new_version"
+          echo "NEW_TAG=${new_version}" >> $GITHUB_ENV
+
+      - name: Create new tag
+        run: |
+          git tag -a "${{ env.NEW_TAG }}" -m "Release ${{ env.NEW_TAG }}"
+          git push origin "${{ env.NEW_TAG }}"
+
+
+
+
+# name: CI cd
+# on:
+#   # workflow_dispatch:
+#     # inputs:
+#     #   branch:
+#     #     description: 'The branch to build'
+#     #     required: true
+#     #   environment:
+#     #     description: 'The environment to deploy to'
+#     #     required: true
+      
+
+
+#   push:
+#     branches:
+#       - main
+#       - release
+#       - test
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: checkout 
+#         uses: actions/checkout@v3
+#         with:
+#           repository: davisgeorge/githubactions
+#           ref: ${{github.ref}}
+#           # ref: ${{ github.event.inputs.branch }}
+          
+         
+#       - name: Get the latest tag
+#         id: get_latest_tag
+#         run: |
+#           latest_tag=$(git describe --abbrev=0 --tags)
+#           echo "Latest tag is $latest_tag"
+#           echo "TAG=${latest_tag}" >> $GITHUB_ENV
+
+
+#       # - name: Parse the latest tag version
+#       #   id: parse_tag
+#       #   run: echo "::set-output name=major_minor_patch::$(echo "${{ steps.get_latest_tag.outputs.tag }}" | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\1 \2 \3/')"
+
+#       # - name: Increment patch version
+#       #   id: increment_patch
+#       #   run: echo "::set-output name=new_patch::$(echo "$(( $(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | cut -d' ' -f3) + 1 ))")"
+
+#       # - name: Create new tag
+#       #   id: create_tag
+#       #   run: |
+#       #     git config --global user.email "davis.work192@gmail.com"
+#       #     git config --global user.name "davisgeorge"
+#       #     new_tag=$(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | awk '{ printf "v%d.%d.%d", $1, $2, '${{ steps.increment_patch.outputs.new_patch }}' }')
+#       #     git tag -a -m "Versioned tag $new_tag" $new_tag
+
+#       # - name: Push new tag
+#       #   run: git push --tags
+
+
+
+
+
+
+#   dev-relase:
+#     name: Deploy-Dev
+#     if: '${{ github.ref == ''refs/heads/release'' }}'
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#         with:
+#           ref: release
+#       - name: this is dev branch
+#         run: |
+#           echo "this is dev-relase branch"
+#           git branch
+#   dev-test:
+#     name: Deploy-test
+#     if: '${{ github.ref == ''refs/heads/test'' }}'
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#         with:
+#           ref: release
+#       - name: this is dev branch
+#         run: |
+#           echo "this is dev-test branch"
+#           git branch
