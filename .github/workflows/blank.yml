@@ -51,6 +51,8 @@ jobs:
       - name: Create new tag
         id: create_tag
         run: |
+          git config --global user.email "davis.work192@gmail.com"
+          git config --global user.name "davisgeorge"
           new_tag=$(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | awk '{ printf "v%d.%d.%d", $1, $2, '${{ steps.increment_patch.outputs.new_patch }}' }')
           git tag -a -m "Versioned tag $new_tag" $new_tag
 
