@@ -30,44 +30,40 @@ jobs:
             
     
         
-      - name: Run a multi-line script
+      
+      - name: Checkout code
+        uses: actions/checkout@v2
+  
+      - name: Fetch tags
+        run: git fetch --tags
+  
+      - name: Get latest tag
+        id: get-latest-tag
         run: |
-            git fetch --tags
-            tagFmt="^v?[0-9]+\.[0-9]+\.[0-9]+$"
-            tag="$(git for-each-ref --sort=-v:refname --format '%(refname:lstrip=2)' | grep -E "$tagFmt" | head -n 1)"
-            [[ "$tag" =~ ^([0-9]+) ]] # use ^(v[0-9]+) for vX
-            major=${BASH_REMATCH[1]}
-            # update major tag
-            git tag -f "$major"
-            git push -f origin "$major"
-            # add vX as 1 is linked to short sha bug https://github.com/anothrNick/github-tag-action/actions/runs/3139501775/jobs/5099976842#step:1:35
-            git tag -f "v$major"
-            git push -f origin "v$major"
+          tagFmt="^v?[0-9]+\.[0-9]+\.[0-9]+$"
+          latest_tag=$(git for-each-ref --sort=-v:refname --format '%(refname:lstrip=2)' | grep -E "$tagFmt" | head -n 1)
+          echo "::set-output name=tag::$latest_tag"
+  
+      - name: Extract major version
+        id: extract-major-version
+        run: |
+          tag="$INPUT_TAG"  # Use the tag from the previous step
+          [[ "$tag" =~ ^([0-9]+) ]]
+          major=${BASH_REMATCH[1]}
+          echo "::set-output name=major::$major"
+  
+      - name: Create new tag
+        id: create-new-tag
+        run: |
+          major="$INPUT_MAJOR"  # Use the major version from the previous step
+          git tag -a -m "New tag based on $INPUT_TAG" "$major"
+          echo "::set-output name=new-tag::$major"
+  
+      - name: Push new tag
+        run: |
+          new_tag="$INPUT_NEW_TAG"  # Use the new tag from the previous step
+          git push origin "$new_tag"
 
-          # echo "$GITHUB_ACTOR"
-          # git config user.name "$GITHUB_ACTOR"
-          # git config user.email "github-actions@users.noreply.github.com"
-          # git tag -a V2 -m"test tag"
-          # git push origin --tags
-        #   VERSION_PREFIX="v"
-
-        #   VERSION_MAJOR_MINOR="1.0"
-
-        #   VERSION_PATCH=$(git tag --list
-        #   "${VERSION_PREFIX}${VERSION_MAJOR_MINOR}" --sort=-version:refname |
-        #   head -n 1 | grep -oE '[0-9]+$')
-
-        #   if [ -z "$VERSION_PATCH" ]; then
-        #     VERSION_PATCH=0
-        #   else
-        #     VERSION_PATCH=$((VERSION_PATCH + 1))
-        #   fi
-
-        #   NEW_TAG="${VERSION_PREFIX}${VERSION_MAJOR_MINOR}.${VERSION_PATCH}"
-
-        #   echo "Generated new tag: $NEW_TAG"
-
-        #   echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
   dev-relase:
     name: Deploy-Dev
     if: '${{ github.ref == ''refs/heads/release'' }}'
