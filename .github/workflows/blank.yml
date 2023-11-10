@@ -48,19 +48,20 @@ jobs:
     # - name: Deploy to EBS
     #   uses: Zensar-FXCM-Project/SharedLibrary_GithubActions/.github/actions/ebs-deploy-test/@main
  
-   - name: Get latest tag
+
+    - name: Get latest tag
       id: get_tag
       run: |
           git fetch --tags
           latest_tag=$(git for-each-ref --sort=-taggerdate --format '%(refname:short)' refs/tags | head -n 1)
           echo "Latest tag is $latest_tag"
           echo "TAG=${latest_tag}" >> $GITHUB_ENV
- 
+
     - name: Set up Git
       run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "${{ github.actor }}"
- 
+
     - name: Calculate new version
       id: version
       run: |
@@ -68,16 +69,17 @@ jobs:
           major="${parts[0]}"
           minor="${parts[1]}"
           patch="${parts[2]}"
-         
+          
           # Increment the version based on your versioning strategy
           # For example, incrementing the patch version:
           new_patch=$((patch + 1))
           new_version="${major}.${minor}.${new_patch}"
-         
+          
           echo "New version is $new_version"
           echo "NEW_TAG=${new_version}" >> $GITHUB_ENV
- 
+
     - name: Create new tag
       run: |
           git tag -a "${{ env.NEW_TAG }}" -m "Release ${{ env.NEW_TAG }}"
           git push origin "${{ env.NEW_TAG }}"
+
