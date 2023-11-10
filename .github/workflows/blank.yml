@@ -1,10 +1,10 @@
 name: CI cd
-'on':
-  push:
-    branches:
-      - main
-      - release
-      - test
+'on': workflow_dispatch
+  # push:
+  #   branches:
+  #     - main
+  #     - release
+  #     - test
 jobs:
   build:
     runs-on: ubuntu-latest
