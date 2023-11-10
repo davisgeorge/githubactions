@@ -34,27 +34,19 @@ jobs:
     
    
       - name: Fetch existing tags
-        run: git fetch --tags
-      
-      - name: Get Latest Tag
+      - name: Get latest tag
         id: get_tag
-        run: echo "::set-output name=TAG::$(git describe --abbrev=0 --tags || echo 'v0.0.0')"
-
-      - name: Determine Next Version
-        id: determine_version
-        run: |
-          # Use a script or tool to determine the next version based on your strategy
-          # You might want to parse the existing tag and increment the MAJOR, MINOR, or PATCH version
-          # For simplicity, let's just increment the PATCH version
-          OLD_VERSION=${{ steps.get_tag.outputs.TAG }}
-          IFS='.' read -ra VERSION <<< "$OLD_VERSION"
-          NEW_VERSION="${VERSION[0]}.${VERSION[1]}.$((${VERSION[2]} + 1))"
-          echo "::set-output name=NEW_VERSION::$NEW_VERSION"
-
-      - name: Create and Push Tag
-        run: |
-          git tag ${{ steps.determine_version.outputs.NEW_VERSION }}
-          git push origin ${{ steps.determine_version.outputs.NEW_VERSION }}
+        run: echo ::set-output name=TAG::$(git describe --tags --abbrev=0)
+  
+      - name: Increase patch version
+        id: semver
+        run: echo ::set-output name=NEW_TAG::$(node -e "console.log(require('semver').inc('${{ steps.get_tag.outputs.TAG }}', 'patch'))")
+  
+      - name: Create new tag
+        run: git tag ${{ steps.semver.outputs.NEW_TAG }}
+        
+      - name: Push new tag
+        run: git push origin ${{ steps.semver.outputs.NEW_TAG }}    
       # - name: Get the latest tag
       #   id: get_latest_tag
       #   run: echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
