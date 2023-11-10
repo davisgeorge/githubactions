@@ -35,29 +35,48 @@ jobs:
    
       - name: Fetch existing tags
         run: git fetch --tags
+      
+      - name: Get Latest Tag
+        id: get_tag
+        run: echo "::set-output name=TAG::$(git describe --abbrev=0 --tags || echo 'v0.0.0')"
 
-      - name: Get the latest tag
-        id: get_latest_tag
-        run: echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
-
-      - name: Parse the latest tag version
-        id: parse_tag
-        run: echo "::set-output name=major_minor_patch::$(echo "${{ steps.get_latest_tag.outputs.tag }}" | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\1 \2 \3/')"
-
-      - name: Increment patch version
-        id: increment_patch
-        run: echo "::set-output name=new_patch::$(echo "$(( $(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | cut -d' ' -f3) + 1 ))")"
-
-      - name: Create new tag
-        id: create_tag
+      - name: Determine Next Version
+        id: determine_version
         run: |
-          git config --global user.email "davis.work192@gmail.com"
-          git config --global user.name "davisgeorge"
-          new_tag=$(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | awk '{ printf "v%d.%d.%d", $1, $2, '${{ steps.increment_patch.outputs.new_patch }}' }')
-          git tag -a -m "Versioned tag $new_tag" $new_tag
+          # Use a script or tool to determine the next version based on your strategy
+          # You might want to parse the existing tag and increment the MAJOR, MINOR, or PATCH version
+          # For simplicity, let's just increment the PATCH version
+          OLD_VERSION=${{ steps.get_tag.outputs.TAG }}
+          IFS='.' read -ra VERSION <<< "$OLD_VERSION"
+          NEW_VERSION="${VERSION[0]}.${VERSION[1]}.$((${VERSION[2]} + 1))"
+          echo "::set-output name=NEW_VERSION::$NEW_VERSION"
 
-      - name: Push new tag
-        run: git push --tags
+      - name: Create and Push Tag
+        run: |
+          git tag ${{ steps.determine_version.outputs.NEW_VERSION }}
+          git push origin ${{ steps.determine_version.outputs.NEW_VERSION }}
+      # - name: Get the latest tag
+      #   id: get_latest_tag
+      #   run: echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
+
+      # - name: Parse the latest tag version
+      #   id: parse_tag
+      #   run: echo "::set-output name=major_minor_patch::$(echo "${{ steps.get_latest_tag.outputs.tag }}" | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\1 \2 \3/')"
+
+      # - name: Increment patch version
+      #   id: increment_patch
+      #   run: echo "::set-output name=new_patch::$(echo "$(( $(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | cut -d' ' -f3) + 1 ))")"
+
+      # - name: Create new tag
+      #   id: create_tag
+      #   run: |
+      #     git config --global user.email "davis.work192@gmail.com"
+      #     git config --global user.name "davisgeorge"
+      #     new_tag=$(echo "${{ steps.parse_tag.outputs.major_minor_patch }}" | awk '{ printf "v%d.%d.%d", $1, $2, '${{ steps.increment_patch.outputs.new_patch }}' }')
+      #     git tag -a -m "Versioned tag $new_tag" $new_tag
+
+      # - name: Push new tag
+      #   run: git push --tags
 
 
 
