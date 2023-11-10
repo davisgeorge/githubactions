@@ -1,6 +1,6 @@
 name: CI cd
 on:
-  workflow_dispatch:
+  # workflow_dispatch:
     # inputs:
     #   branch:
     #     description: 'The branch to build'
@@ -11,11 +11,11 @@ on:
       
 
 
-  # push:
-  #   branches:
-  #     - main
-  #     - release
-  #     - test
+  push:
+    branches:
+      - main
+      - release
+      - test
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,7 +31,7 @@ jobs:
       - name: Get the latest tag
         id: get_latest_tag
         run: |
-           echo "tag=$(git describe --abbrev=0 --tags)" >> $GITHUB_ENV
+           echo "tag=$(git tag)" >> $GITHUB_ENV
            echo "The latest tag is ${{ env.tag }}"
            echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
            echo ${{ steps.get_latest_tag.outputs.tag }}
