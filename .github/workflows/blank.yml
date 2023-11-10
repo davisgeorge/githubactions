@@ -32,22 +32,32 @@ jobs:
         
       
     
-      - name: Fetch tags
+      - name: Fetch existing tags
         run: git fetch --tags
-  
-      - name: Create and push new tag
-        run: |
-          tagFmt="^v?[0-9]+\.[0-9]+\.[0-9]+$"
-          fetchedTag=$(git for-each-ref --sort=-v:refname --format '%(refname:lstrip=2)' | grep -E "$tagFmt" | head -n 1)
-          
-          if [[ $fetchedTag =~ ^([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
-            newTag="${BASH_REMATCH[1]}"
-            git tag -a "$newTag" -m "Tag $newTag created"
-            git push origin "$newTag"
-          else
-            echo "No valid tag found."
-          fi"
 
+      - name: Get the latest tag
+        id: get_latest_tag
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0)
+          echo "::set-output name=tag::$latest_tag"
+
+      - name: Extract version components
+        id: extract_version
+        run: |
+          IFS='.' read -ra version <<< "${{ steps.get_latest_tag.outputs.tag }}"
+          echo "::set-output name=major::${version[0]}"
+          echo "::set-output name=minor::${version[1]}"
+          echo "::set-output name=patch::${version[2]}"
+
+      - name: Increment patch version
+        id: increment_patch
+        run: echo "::set-output name=patch::$((${{ steps.extract_version.outputs.patch }} + 1))"
+
+      - name: Create new tag
+        run: |
+          new_tag="${{ steps.extract_version.outputs.major }}.${{ steps.extract_version.outputs.minor }}.${{ steps.increment_patch.outputs.patch }}"
+          git tag -a -m "Release $new_tag" $new_tag
+          git push --tags
   dev-relase:
     name: Deploy-Dev
     if: '${{ github.ref == ''refs/heads/release'' }}'
