@@ -161,6 +161,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Check if yq is installed
+        run: |
+          if command -v yq &> /dev/null
+          then
+            echo "yq is installed"
+          else
+            echo "yq is not installed"
+          fi
+
       - name: Install yq
         run: |
          sudo apt-get update
