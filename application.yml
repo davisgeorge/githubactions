@@ -1,0 +1,25 @@
+server:
+  port: 5000
+spring:
+  jackson:
+    default-property-inclusion: non-null
+  profiles:
+    active: qa
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      max-lifetime: 2000000
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+#    hibernate:
+#      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+    show-sql: false
+  sql:
+    init:
+      mode: embedded
+spring.application.name: user_service
+cloud.aws.region.auto: false
+defaultLanguage: en-US
