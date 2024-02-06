@@ -162,7 +162,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install yq
-        run: sudo apt-get update && sudo apt-get install yq -y
+        run: |
+         sudo apt-get update
+         sudo apt-get install yq -y
 
       - name: Update YAML
         run: |
