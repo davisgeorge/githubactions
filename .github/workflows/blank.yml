@@ -118,31 +118,56 @@
 # #           git tag test 
 # #           git push origin --tags
 
-name: Update Profile
+# name: Update Profile
 
-'on':
+# 'on':
+#   push:
+#     branches:
+#         - 'main'
+#         - 'release'
+#         - 'test'
+
+# jobs:
+#   update-profile:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: Update application.yml
+#       run: |
+#         sed -i 's/profiles:\s*active:\s*qa/profiles: active: dev/' application.yml
+#         cat application.yml
+
+#     - name: check application.yml
+#       run: |
+#         cat application.yml
+
+name: Update Profile Active
+
+on:
   push:
     branches:
-        - 'main'
-        - 'release'
-        - 'test'
+      - main  # Change this to your main branch name if different
 
 jobs:
-  update-profile:
+  update_profile_active:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Update application.yml
-      run: |
-        sed -i 's/profiles:\s*active:\s*qa/profiles: active: dev/' application.yml
-        cat application.yml
+      - name: Install yq
+        run: sudo apt-get update && sudo apt-get install yq -y
 
-    - name: check application.yml
-      run: |
-        cat application.yml
- 
+      - name: Update YAML
+        run: |
+          yq w -i application.yml 'spring.profiles.active' 'dev'
+          cat application.yml
+
+    
+
 
   
