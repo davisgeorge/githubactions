@@ -149,7 +149,9 @@ name: Update Profile Active
 on:
   push:
     branches:
-      - main  # Change this to your main branch name if different
+        - 'main'
+        - 'release'
+        - 'test'
 
 jobs:
   update_profile_active:
