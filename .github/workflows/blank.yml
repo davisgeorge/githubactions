@@ -120,10 +120,12 @@
 
 name: Update Profile
 
-on:
+'on':
   push:
     branches:
-      - main  # Change this to the default branch of your repository
+        - 'main'
+        - 'release'
+        - 'test'
 
 jobs:
   update-profile:
