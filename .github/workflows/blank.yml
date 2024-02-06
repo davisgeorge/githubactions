@@ -163,7 +163,7 @@ jobs:
 
       - name: Update YAML
         run: |
-         yq eval '.spring.profiles.active = "dev"' application.yaml -i
+         yq eval '.spring.profiles.active = "dev"' application.yml -i
          cat application.yml
 
     
