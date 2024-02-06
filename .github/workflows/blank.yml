@@ -140,4 +140,9 @@ jobs:
         sed -i 's/profiles:\s*active:\s*qa/profiles: active: dev/' application.yml
         cat application.yml
 
+    - name: check application.yml
+      run: |
+        cat application.yml
+ 
+
   
