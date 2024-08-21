@@ -416,21 +416,18 @@ jobs:
             echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_PROD_AWS_ROLE_ARN}}" >> $GITHUB_ENV
           fi
 
-      - name: Update ECS Task Definition JSON in place
+      - name: Update ECS Task Definition
+        id: update-ecs
         run: |
-          sed -i 's/"family": ".*"/"family": "'"${FAMILY}"'"/' emi-user-task-def.json
-          sed -i 's/"name": ".*"/"name": "'"${CONTAINER_NAME}"'"/' emi-user-task-def.json
-          sed -i 's|"image": ".*"|"image": "'"${ACCOUNT_ID}"'.dkr.ecr.us-east-1.amazonaws.com/'"${REPO_NAME}"'"|' emi-user-task-def.json
-          sed -i 's/"cpu": [0-9]*/"cpu": '"${CPU}"'/' emi-user-task-def.json
-          sed -i 's/"containerPort": [0-9]*/"containerPort": '"${CONTAINER_PORT}"'/' emi-user-task-def.json
-          sed -i 's/"hostPort": [0-9]*/"hostPort": '"${HOST_PORT}"'/' emi-user-task-def.json
-          sed -i 's/"awslogs-group": ".*"/"awslogs-group": "'"${AWSLOGS_GROUP}"'"/' emi-user-task-def.json
-          sed -i 's/"awslogs-region": ".*"/"awslogs-region": "'"${AWSLOGS_REGION}"'"/' emi-user-task-def.json
-          sed -i 's/"cpu": ".*"/"cpu": "'"${CPU}"'"/' emi-user-task-def.json
-          sed -i 's/"memory": ".*"/"memory": "'"${MEMORY}"'"/' emi-user-task-def.json
-          sed -i 's|"executionRoleArn": ".*"|"executionRoleArn": "arn:aws:iam::'"${ACCOUNT_ID}"':role/ecs_task_execution_role"|' emi-user-task-def.json
-          sed -i 's|"taskRoleArn": ".*"|"taskRoleArn": "arn:aws:iam::'"${ACCOUNT_ID}"':role/ecs_task_role"|' emi-user-task-def.json
-
+          sed -i 's/"family": "[^"]*"/"family": "${{ env.FAMILY }}"/' emi-user-task-def.json
+          sed -i 's/"name": "[^"]*"/"name": "${{ env.NAME }}"/' emi-user-task-def.json
+          sed -i 's|"image": "[^"]*/[^"]*/[^"]*/[^"]*"|"image": "${{ env.ACCOUNT_ID }}/${{ env.REPO_NAME }}"|' emi-user-task-def.json
+          sed -i 's/"cpu": [^,]*/"cpu": ${{ env.CPU }}/' emi-user-task-def.json
+          sed -i 's/"containerPort": [^,]*/"containerPort": ${{ env.CONTAINER_PORT }}/' emi-user-task-def.json
+          sed -i 's/"hostPort": [^,]*/"hostPort": ${{ env.HOST_PORT }}/' emi-user-task-def.json
+          sed -i 's|"awslogs-group": "[^"]*"|"awslogs-group": "${{ env.AWSLOGS_GROUP }}"|' emi-user-task-def.json
+          sed -i 's|"awslogs-region": "[^"]*"|"awslogs-region": "${{ env.AWSLOGS_REGION }}"|' emi-user-task-def.json
+          sed -i 's|"taskRoleArn": "arn:aws:iam::[^:]*:role/[^"]*"|"taskRoleArn": "arn:aws:iam::${{ env.ACCOUNT_ID }}:role/${{ env.ROLE_NAME }}"|' emi-user-task-def.json
           cat emi-user-task-def.json
 
 
