@@ -421,7 +421,7 @@ jobs:
           jq '.family = env.FAMILY |
               .containerDefinitions[0].name = env.ECS_CONTAINER |
               .containerDefinitions[0].image = env.ACCOUNT_ID + ".dkr.ecr.us-east-1.amazonaws.com/" + env.REPO_NAME |
-              .containerDefinitions[0].cpu = ( env.CPU | tonumber )
+              .containerDefinitions[0].cpu = (env.CPU | tonumber)
               .containerDefinitions[0].portMappings[0].containerPort = (env.CH_PORT | tonumber) |
               .containerDefinitions[0].portMappings[0].hostPort = (env.CH_PORT | tonumber) |
               .containerDefinitions[0].logConfiguration.options."awslogs-group" = env.AWSLOGS_GROUP |
