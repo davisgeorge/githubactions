@@ -418,22 +418,33 @@ jobs:
 
       - name: Update ECS Task Definition JSON in place
         run: |
-          jq '.family = env.FAMILY |
-              .containerDefinitions[0].name = env.ECS_CONTAINER |
-              .containerDefinitions[0].image = env.ACCOUNT_ID + ".dkr.ecr.us-east-1.amazonaws.com/" + env.REPO_NAME |
-              .containerDefinitions[0].cpu = (env.CPU | tonumber)
-              .containerDefinitions[0].portMappings[0].containerPort = (env.CH_PORT | tonumber) |
-              .containerDefinitions[0].portMappings[0].hostPort = (env.CH_PORT | tonumber) |
-              .containerDefinitions[0].logConfiguration.options."awslogs-group" = env.AWSLOGS_GROUP |
-              .containerDefinitions[0].logConfiguration.options."awslogs-region" = env.AWSLOGS_REGION |
-              .cpu = env.CPU |
-              .memory = env.MEMORY |
-              .executionRoleArn = "arn:aws:iam::" + env.ACCOUNT_ID + ":role/ecs_task_execution_role" | 
-              .taskRoleArn = "arn:aws:iam::" + env.ACCOUNT_ID + ":role/ecs_task_role"' \
-              emi-user-task-def.json > temp-task-definition.json
-          
-              mv temp-task-definition.json emi-user-task-def.json
-              cat emi-user-task-def.json
+          jq --arg family "$FAMILY" \
+            --arg name "$ECS_CONTAINER" \
+            --arg image "$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMG_TAG" \
+            --argjson cpu "$CPU" \
+            --argjson containerPort "$CH_PORT" \
+            --argjson hostPort "$CH_PORT" \
+            --arg awslogsGroup "$AWSLOGS_GROUP" \
+            --arg awslogsRegion "$AWS_REGION" \
+            --arg taskRoleArn "arn:aws:iam::$ACCOUNT_ID:role/ecs_task_role" \
+            --arg executionRoleArn "arn:aws:iam::$ACCOUNT_ID:role/ecs_task_execution_role" \
+            --argjson memory "$MEMORY" \
+            '.family = $family |
+              .containerDefinitions[0].name = $name |
+              .containerDefinitions[0].image = $image |
+              .containerDefinitions[0].cpu = $cpu |
+              .containerDefinitions[0].portMappings[0].containerPort = $containerPort |
+              .containerDefinitions[0].portMappings[0].hostPort = $hostPort |
+              .containerDefinitions[0].logConfiguration.options."awslogs-group" = $awslogsGroup |
+              .containerDefinitions[0].logConfiguration.options."awslogs-region" = $awslogsRegion |
+              .cpu = $cpu |
+              .memory = $memory |
+              .executionRoleArn = $executionRoleArn |
+              .taskRoleArn = $taskRoleArn' emi-user-task-def.json > updated-task-def.json
+
+              cat  updated-task-def.json
+
+
 
       # - name: Configure AWS credentials
       #   uses: aws-actions/configure-aws-credentials@v3
