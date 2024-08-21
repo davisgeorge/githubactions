@@ -335,25 +335,25 @@ jobs:
         
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          repository: tradu/emi-user-ms
-          fetch-depth: 0
+        # with:
+        #   repository: tradu/emi-user-ms
+        #   fetch-depth: 0
 
-      - uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          owner: tradu
-          repositories: onboardingemi-actions-shared-library
-          app-id: ${{ secrets.EMITRADU_GITHUB_APP_APPID }}
-          private-key: ${{ secrets.EMITRADU_GITHUB_APP_PRIVATE_KEY }}
+      # - uses: actions/create-github-app-token@v1
+      #   id: app-token
+      #   with:
+      #     owner: tradu
+      #     repositories: onboardingemi-actions-shared-library
+      #     app-id: ${{ secrets.EMITRADU_GITHUB_APP_APPID }}
+      #     private-key: ${{ secrets.EMITRADU_GITHUB_APP_PRIVATE_KEY }}
          
-      - name: Checkout SharedLibrary
-        uses: actions/checkout@v3
-        with:
-          repository: tradu/onboardingemi-actions-shared-library
-          ref: develop
-          token: ${{ steps.app-token.outputs.token }}
-          path: sharedlibrary
+      # - name: Checkout SharedLibrary
+      #   uses: actions/checkout@v3
+      #   with:
+      #     repository: tradu/onboardingemi-actions-shared-library
+      #     ref: develop
+      #     token: ${{ steps.app-token.outputs.token }}
+      #     path: sharedlibrary
           
       - name: Set Environment variables
         id: env-variables
@@ -431,121 +431,121 @@ jobs:
           cat emi-user-task-def.json
 
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          # role-session-name: ECR-push
-          aws-region: ${{env.AWS_REGION}}
-          role-to-assume: ${{ secrets.ECS_EMITRADU_DEV_AWS_ECR_ROLE_ARN }}
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v3
+      #   with:
+      #     # role-session-name: ECR-push
+      #     aws-region: ${{env.AWS_REGION}}
+      #     role-to-assume: ${{ secrets.ECS_EMITRADU_DEV_AWS_ECR_ROLE_ARN }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          mask-password: 'true'
+      # - name: Login to Amazon ECR
+      #   id: login-ecr
+      #   uses: aws-actions/amazon-ecr-login@v1
+      #   with:
+      #     mask-password: 'true'
 
-      - name: Build application
-        id: build-app
-        shell: bash
-        run: mvn install -DskipTests -Dspring.profiles.active=${{ env.ENV_NAME }}
+      # - name: Build application
+      #   id: build-app
+      #   shell: bash
+      #   run: mvn install -DskipTests -Dspring.profiles.active=${{ env.ENV_NAME }}
    
 
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ env.IMG_TAG }}
-          REPOSITORY: ${{ env.ECR_REPO }}
-        run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      # - name: Build, tag, and push image to Amazon ECR
+      #   id: build-image
+      #   env:
+      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      #     IMAGE_TAG: ${{ env.IMG_TAG }}
+      #     REPOSITORY: ${{ env.ECR_REPO }}
+      #   run: |
+      #     # Build a docker container and
+      #     # push it to ECR so that it can
+      #     # be deployed to ECS.
+      #     docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
+      #     docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+      #     echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          aws-access-key-id: ${{secrets.ECS_EMITRADU_DEV_AWS_ACCESS_KEY_ID}}
-          aws-secret-access-key: ${{secrets.ECS_EMITRADU_DEV_AWS_SECRET_ACCESS_KEY}}
-          aws-region: ${{env.AWS_REGION}}
-          role-to-assume: ${{secrets.ECS_EMITRADU_DEV_ROLE_ARN}}
+      # - name: Set up AWS CLI
+      #   uses: aws-actions/configure-aws-credentials@v3
+      #   with:
+      #     aws-access-key-id: ${{secrets.ECS_EMITRADU_DEV_AWS_ACCESS_KEY_ID}}
+      #     aws-secret-access-key: ${{secrets.ECS_EMITRADU_DEV_AWS_SECRET_ACCESS_KEY}}
+      #     aws-region: ${{env.AWS_REGION}}
+      #     role-to-assume: ${{secrets.ECS_EMITRADU_DEV_ROLE_ARN}}
       
-      - name: Install Python 3.9
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
+      # - name: Install Python 3.9
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.9
             
-      - name: Install EB CLI using pip
-        shell: bash
-        run: |
-          python -m pip install --upgrade pip
-          pip install awscli
+      # - name: Install EB CLI using pip
+      #   shell: bash
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install awscli
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: emi-user-task-def.json
-          container-name: ${{ env.ECS_CONTAINER }}
-          image: ${{ steps.build-image.outputs.image }}
+      # - name: Fill in the new image ID in the Amazon ECS task definition
+      #   id: task-def
+      #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+      #   with:
+      #     task-definition: emi-user-task-def.json
+      #     container-name: ${{ env.ECS_CONTAINER }}
+      #     image: ${{ steps.build-image.outputs.image }}
 
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: emi-tradu-dev
-          wait-for-service-stability: true
+      # - name: Deploy Amazon ECS task definition
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      #   with:
+      #     task-definition: ${{ steps.task-def.outputs.task-definition }}
+      #     service: ${{ env.ECS_SERVICE }}
+      #     cluster: emi-tradu-dev
+      #     wait-for-service-stability: true
 
-      - name: Check deployed version 
-        run: |
-           IMG_TASK_DEF=$(aws ecs describe-services --cluster emi-tradu-dev --service ${{ env.ECS_SERVICE }} --query "reverse(sort_by(services, &createdAt))[0].taskDefinition" --region ${{ env.AWS_REGION }} --output text)
-           IMG_RUNNIG=$(aws ecs describe-task-definition --task-definition $IMG_TASK_DEF --query [taskDefinition.containerDefinitions[].image] --region ${{ env.AWS_REGION }} --output text)
-           image=${{ steps.build-image.outputs.image }}
+      # - name: Check deployed version 
+      #   run: |
+      #      IMG_TASK_DEF=$(aws ecs describe-services --cluster emi-tradu-dev --service ${{ env.ECS_SERVICE }} --query "reverse(sort_by(services, &createdAt))[0].taskDefinition" --region ${{ env.AWS_REGION }} --output text)
+      #      IMG_RUNNIG=$(aws ecs describe-task-definition --task-definition $IMG_TASK_DEF --query [taskDefinition.containerDefinitions[].image] --region ${{ env.AWS_REGION }} --output text)
+      #      image=${{ steps.build-image.outputs.image }}
             
-            echo "IMG_RUNNIG=$IMG_RUNNIG"
-            echo "image=$image"
+      #       echo "IMG_RUNNIG=$IMG_RUNNIG"
+      #       echo "image=$image"
             
-            if [[ "${IMG_RUNNIG}" == "${image}" ]]; then
-                  echo "Deployment Successfull "
+      #       if [[ "${IMG_RUNNIG}" == "${image}" ]]; then
+      #             echo "Deployment Successfull "
                   
-              else
-                        echo "Deployment failed image does not match "
-                        echo "IMG that is running =$IMG_RUNNIG"
-                        echo "image that we want to deploy =$image"
-                        exit 1
-            fi      
+      #         else
+      #                   echo "Deployment failed image does not match "
+      #                   echo "IMG that is running =$IMG_RUNNIG"
+      #                   echo "image that we want to deploy =$image"
+      #                   exit 1
+      #       fi      
 
 
-      # - name: SonarQube Analysis
-      #   uses: tradu/onboardingemi-actions-shared-library/.github/actions/ebs-sonar/@develop
-      #   with:
-      #     CACERTS_TRUSTSTORE_PWD: ${{ secrets.CACERTS_TRUSTSTORE_PWD }}
-      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      #     SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
-      #     SONAR_PROJECT_NAME: ${{ secrets.SONAR_PROJECT_NAME }}
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #     MAVEN_USERNAME: ${{ secrets.EMITRADU_REPO_PUBLISHER_USERNAME}}
-      #     MAVEN_PASSWORD: ${{ secrets.EMITRADU_REPO_PUBLISHER_PASSWORD}}
-      #   if: github.ref == 'refs/heads/develop'
+      # # - name: SonarQube Analysis
+      # #   uses: tradu/onboardingemi-actions-shared-library/.github/actions/ebs-sonar/@develop
+      # #   with:
+      # #     CACERTS_TRUSTSTORE_PWD: ${{ secrets.CACERTS_TRUSTSTORE_PWD }}
+      # #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # #     SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+      # #     SONAR_PROJECT_NAME: ${{ secrets.SONAR_PROJECT_NAME }}
+      # #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # #     MAVEN_USERNAME: ${{ secrets.EMITRADU_REPO_PUBLISHER_USERNAME}}
+      # #     MAVEN_PASSWORD: ${{ secrets.EMITRADU_REPO_PUBLISHER_PASSWORD}}
+      # #   if: github.ref == 'refs/heads/develop'
           
-      # - name: EBS Build
-      #   uses: tradu/onboardingemi-actions-shared-library/.github/actions/ebs-build/@develop
-      #   with:
-      #     MAVEN_USERNAME: ${{ secrets.EMITRADU_REPO_PUBLISHER_USERNAME}}
-      #     MAVEN_PASSWORD: ${{ secrets.EMITRADU_REPO_PUBLISHER_PASSWORD}}
-      #     AWS_ACCESS_KEY_ID: ${{ env.EMI_AWS_ACCESS_KEY_ID}}
-      #     AWS_SECRET_ACCESS_KEY: ${{ env.EMI_AWS_SECRET_ACCESS_KEY}}
-      #     role-to-assume: ${{ env.EMI_AWS_ROLE_TO_ASSUME}}
+      # # - name: EBS Build
+      # #   uses: tradu/onboardingemi-actions-shared-library/.github/actions/ebs-build/@develop
+      # #   with:
+      # #     MAVEN_USERNAME: ${{ secrets.EMITRADU_REPO_PUBLISHER_USERNAME}}
+      # #     MAVEN_PASSWORD: ${{ secrets.EMITRADU_REPO_PUBLISHER_PASSWORD}}
+      # #     AWS_ACCESS_KEY_ID: ${{ env.EMI_AWS_ACCESS_KEY_ID}}
+      # #     AWS_SECRET_ACCESS_KEY: ${{ env.EMI_AWS_SECRET_ACCESS_KEY}}
+      # #     role-to-assume: ${{ env.EMI_AWS_ROLE_TO_ASSUME}}
   
-      # - name: EBS Deploy
-      #   uses: tradu/onboardingemi-actions-shared-library/.github/actions/ebs-deploy/@develop
-      #   with:
-      #     AWS_ACCESS_KEY_ID: ${{ env.EMI_AWS_ACCESS_KEY_ID}}
-      #     AWS_SECRET_ACCESS_KEY: ${{ env.EMI_AWS_SECRET_ACCESS_KEY}}
-      #     role-to-assume: ${{ env.EMI_AWS_ROLE_TO_ASSUME}}
+      # # - name: EBS Deploy
+      # #   uses: tradu/onboardingemi-actions-shared-library/.github/actions/ebs-deploy/@develop
+      # #   with:
+      # #     AWS_ACCESS_KEY_ID: ${{ env.EMI_AWS_ACCESS_KEY_ID}}
+      # #     AWS_SECRET_ACCESS_KEY: ${{ env.EMI_AWS_SECRET_ACCESS_KEY}}
+      # #     role-to-assume: ${{ env.EMI_AWS_ROLE_TO_ASSUME}}
 
 
 
