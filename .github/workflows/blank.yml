@@ -369,8 +369,8 @@ jobs:
             echo "CPU=1024" >> $GITHUB_ENV
             echo "MEMORY=3072" >> $GITHUB_ENV
             echo "CH_PORT=5000" >> $GITHUB_ENV
-            echo "AWSLOGS_GROUP=/ecs/user-dev-service"
-            echo "ACCOUNT_ID=888210423353"
+            echo "AWSLOGS_GROUP=/ecs/user-dev-service" >> $GITHUB_ENV
+            echo "ACCOUNT_ID=888210423353" >> $GITHUB_ENV
             echo "APP_NAME=emitradudev-user-srv" >> $GITHUB_ENV
             echo "EB_ENV_NAME=emitradudev-user-srv-env" >> $GITHUB_ENV
             echo "BUILD_FOLDER=emi-user-ms-dev" >> $GITHUB_ENV
@@ -420,7 +420,7 @@ jobs:
         run: |
           jq --arg family "$FAMILY" \
             --arg name "$ECS_CONTAINER" \
-            --arg image "$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMG_TAG" \
+            --arg image "$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:" \
             --argjson cpu "$CPU" \
             --argjson containerPort "$CH_PORT" \
             --argjson hostPort "$CH_PORT" \
