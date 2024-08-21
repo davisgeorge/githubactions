@@ -416,20 +416,24 @@ jobs:
             echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_PROD_AWS_ROLE_ARN}}" >> $GITHUB_ENV
           fi
 
-      - name: Update ECS Task Definition
-        id: update-ecs
+      - name: Update ECS Task Definition JSON in place
         run: |
-          sed -i 's/"family": "[^"]*"/"family": "${{ env.FAMILY }}"/' emi-user-task-def.json
-          sed -i 's/"name": "[^"]*"/"name": "${{ env.NAME }}"/' emi-user-task-def.json
-          sed -i 's|"image": "[^"]*/[^"]*/[^"]*/[^"]*"|"image": "${{ env.ACCOUNT_ID }}/${{ env.REPO_NAME }}"|' emi-user-task-def.json
-          sed -i 's/"cpu": [^,]*/"cpu": ${{ env.CPU }}/' emi-user-task-def.json
-          sed -i 's/"containerPort": [^,]*/"containerPort": ${{ env.CONTAINER_PORT }}/' emi-user-task-def.json
-          sed -i 's/"hostPort": [^,]*/"hostPort": ${{ env.HOST_PORT }}/' emi-user-task-def.json
-          sed -i 's|"awslogs-group": "[^"]*"|"awslogs-group": "${{ env.AWSLOGS_GROUP }}"|' emi-user-task-def.json
-          sed -i 's|"awslogs-region": "[^"]*"|"awslogs-region": "${{ env.AWSLOGS_REGION }}"|' emi-user-task-def.json
-          sed -i 's|"taskRoleArn": "arn:aws:iam::[^:]*:role/[^"]*"|"taskRoleArn": "arn:aws:iam::${{ env.ACCOUNT_ID }}:role/${{ env.ROLE_NAME }}"|' emi-user-task-def.json
-          cat emi-user-task-def.json
-
+          jq '.family = env.FAMILY |
+              .containerDefinitions[0].name = env.CONTAINER_NAME |
+              .containerDefinitions[0].image = env.ACCOUNT_ID + ".dkr.ecr.us-east-1.amazonaws.com/" + env.REPO_NAME |
+              .containerDefinitions[0].cpu = env.CPU |
+              .containerDefinitions[0].portMappings[0].containerPort = (env.CH_PORT | tonumber) |
+              .containerDefinitions[0].portMappings[0].hostPort = (env.CH_PORT | tonumber) |
+              .containerDefinitions[0].logConfiguration.options."awslogs-group" = env.AWSLOGS_GROUP |
+              .containerDefinitions[0].logConfiguration.options."awslogs-region" = env.AWSLOGS_REGION |
+              .cpu = env.CPU |
+              .memory = env.MEMORY |
+              .executionRoleArn = "arn:aws:iam::" + env.ACCOUNT_ID + ":role/ecs_task_execution_role" | 
+              .taskRoleArn = "arn:aws:iam::" + env.ACCOUNT_ID + ":role/ecs_task_role"' \
+              emi-user-task-def.json > temp-task-definition.json
+          
+              mv temp-task-definition.json emi-user-task-def.json
+              cat emi-user-task-def.json
 
       # - name: Configure AWS credentials
       #   uses: aws-actions/configure-aws-credentials@v3
