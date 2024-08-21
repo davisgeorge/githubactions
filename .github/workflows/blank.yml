@@ -1,126 +1,152 @@
-# name: CI cd
-# 'on':
-#   push:
-#     branches:
-#         - 'main'
-#         - 'release'
-#         - 'test'
-#   # pull_request:
-#   #   branches:
-#   #     - main
-#   #     - release
-#   #     - test
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v3
-#       - name: Run a one-line script
-#         run: 'echo Hello, world!'
-#       - name: Run a multi-line script
-#         run: |
-#           echo Add other actions to build,
-#           echo test, and deploy your project.
-#   dev-relase:
-#     name: Deploy-Dev
-#     if: ${{ github.ref == 'refs/heads/release' }}
-
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v3
-#         with:
-#           ref: release
-#       - name: this is dev branch
-#         run: |
-#           echo "this is dev-relase branch"
-#           git branch
-#   dev-test:
-#     name: Deploy-test
-#     if: ${{ github.ref == 'refs/heads/test' }}
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v3
-#         with:
-#           ref: release
-#       - name: this is dev branch
-#         run: |
-#           echo "this is dev-test branch"
-#           git branch
- 
-    
-#       # - name: checkout to release
-#       #   uses: actions/checkout@v3
-#       #   with:
-#       #     ref: release
-#       # - name: push code
-#       #   run: |
-#       #     touch release-file.txt
-#       #     echo "Some release content" > release-file.txt
-#       #     echo "current working branch"
-#       #     git branch
-#       #     git config --global user.email "davis.work192@gmail.com"
-#       #     git config --global user.name "davisgeorge"
-#       #     git add .
-#       #     git commit -m "using github actions"
-#       #     git push origin
-          
-
-        
-#           # git config --global user.email "davis.work192@gmail.com"
-#           # git config --global user.name "davisgeorge"
-#           # git remote set-url origin https://github.com/davisgeorge/githubactions.git
-#           # git checkout release
-#           # git add .
-#           # git commit -m "Auto commit by Github Actions"
-#           # git push origin
-      
-
-# # # This is a basic workflow to help you get started with Actions
-
-# # name: CI
-
-# # # Controls when the workflow will run
-# # on:
-# #   # Triggers the workflow on push or pull request events but only for the "main" branch
+# # name: CI cd
+# # 'on':
 # #   push:
-# #     branches: [ "main" ]
-# #   pull_request:
-# #     branches: [ "main" ]
-
-# #   # Allows you to run this workflow manually from the Actions tab
-# #   workflow_dispatch:
-
-# # # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# #     branches:
+# #         - 'main'
+# #         - 'release'
+# #         - 'test'
+# #   # pull_request:
+# #   #   branches:
+# #   #     - main
+# #   #     - release
+# #   #     - test
 # # jobs:
-# #   # This workflow contains a single job called "build"
 # #   build:
-# #     # The type of runner that the job will run on
 # #     runs-on: ubuntu-latest
-
-# #     # Steps represent a sequence of tasks that will be executed as part of the job
 # #     steps:
-# #       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
 # #       - uses: actions/checkout@v3
-
-# #       # Runs a single command using the runners shell
 # #       - name: Run a one-line script
-# #         run: echo Hello, world!
-
-# #       # Runs a set of commands using the runners shell
+# #         run: 'echo Hello, world!'
 # #       - name: Run a multi-line script
 # #         run: |
 # #           echo Add other actions to build,
 # #           echo test, and deploy your project.
-# #       - name: create tags in repo 
+# #   dev-relase:
+# #     name: Deploy-Dev
+# #     if: ${{ github.ref == 'refs/heads/release' }}
+
+# #     runs-on: ubuntu-latest
+# #     steps:
+# #       - uses: actions/checkout@v3
+# #         with:
+# #           ref: release
+# #       - name: this is dev branch
 # #         run: |
-# #           git config user.name "davisgeorge"
-# #           git config user.email "davis.work192@gmail.com"
-# #           git tag test 
-# #           git push origin --tags
+# #           echo "this is dev-relase branch"
+# #           git branch
+# #   dev-test:
+# #     name: Deploy-test
+# #     if: ${{ github.ref == 'refs/heads/test' }}
+# #     runs-on: ubuntu-latest
+# #     steps:
+# #       - uses: actions/checkout@v3
+# #         with:
+# #           ref: release
+# #       - name: this is dev branch
+# #         run: |
+# #           echo "this is dev-test branch"
+# #           git branch
+ 
+    
+# #       # - name: checkout to release
+# #       #   uses: actions/checkout@v3
+# #       #   with:
+# #       #     ref: release
+# #       # - name: push code
+# #       #   run: |
+# #       #     touch release-file.txt
+# #       #     echo "Some release content" > release-file.txt
+# #       #     echo "current working branch"
+# #       #     git branch
+# #       #     git config --global user.email "davis.work192@gmail.com"
+# #       #     git config --global user.name "davisgeorge"
+# #       #     git add .
+# #       #     git commit -m "using github actions"
+# #       #     git push origin
+          
 
-# name: Update Profile
+        
+# #           # git config --global user.email "davis.work192@gmail.com"
+# #           # git config --global user.name "davisgeorge"
+# #           # git remote set-url origin https://github.com/davisgeorge/githubactions.git
+# #           # git checkout release
+# #           # git add .
+# #           # git commit -m "Auto commit by Github Actions"
+# #           # git push origin
+      
 
-# 'on':
+# # # # This is a basic workflow to help you get started with Actions
+
+# # # name: CI
+
+# # # # Controls when the workflow will run
+# # # on:
+# # #   # Triggers the workflow on push or pull request events but only for the "main" branch
+# # #   push:
+# # #     branches: [ "main" ]
+# # #   pull_request:
+# # #     branches: [ "main" ]
+
+# # #   # Allows you to run this workflow manually from the Actions tab
+# # #   workflow_dispatch:
+
+# # # # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# # # jobs:
+# # #   # This workflow contains a single job called "build"
+# # #   build:
+# # #     # The type of runner that the job will run on
+# # #     runs-on: ubuntu-latest
+
+# # #     # Steps represent a sequence of tasks that will be executed as part of the job
+# # #     steps:
+# # #       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+# # #       - uses: actions/checkout@v3
+
+# # #       # Runs a single command using the runners shell
+# # #       - name: Run a one-line script
+# # #         run: echo Hello, world!
+
+# # #       # Runs a set of commands using the runners shell
+# # #       - name: Run a multi-line script
+# # #         run: |
+# # #           echo Add other actions to build,
+# # #           echo test, and deploy your project.
+# # #       - name: create tags in repo 
+# # #         run: |
+# # #           git config user.name "davisgeorge"
+# # #           git config user.email "davis.work192@gmail.com"
+# # #           git tag test 
+# # #           git push origin --tags
+
+# # name: Update Profile
+
+# # 'on':
+# #   push:
+# #     branches:
+# #         - 'main'
+# #         - 'release'
+# #         - 'test'
+
+# # jobs:
+# #   update-profile:
+# #     runs-on: ubuntu-latest
+
+# #     steps:
+# #     - name: Checkout code
+# #       uses: actions/checkout@v2
+
+# #     - name: Update application.yml
+# #       run: |
+# #         sed -i 's/profiles:\s*active:\s*qa/profiles: active: dev/' application.yml
+# #         cat application.yml
+
+# #     - name: check application.yml
+# #       run: |
+# #         cat application.yml
+
+# name: Update Profile Active
+
+# on:
 #   push:
 #     branches:
 #         - 'main'
@@ -128,45 +154,402 @@
 #         - 'test'
 
 # jobs:
-#   update-profile:
+#   update_profile_active:
 #     runs-on: ubuntu-latest
 
 #     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
 
-#     - name: Update application.yml
-#       run: |
-#         sed -i 's/profiles:\s*active:\s*qa/profiles: active: dev/' application.yml
-#         cat application.yml
+#       - name: Update YAML
+#         run: |
+#          yq eval '.spring.profiles.active = "dev"' application.yml -i
+#          cat application.yml
 
-#     - name: check application.yml
-#       run: |
-#         cat application.yml
-
-name: Update Profile Active
-
+name: emi-user-ms-CICD-Pipeline
 on:
+  workflow_dispatch:
+    inputs:
+      Application_deployment_version:
+        description: Production Application version
+        default: "emitraduprod-user-version-1.0.0"
+      Rollback:
+        description: 'rollback?'
+        required: false
+        default: 'false'
+        type: boolean
+      Image_tag:
+        description: 'Image_tag?'
+        required: false
+        type: string
   push:
-    branches:
-        - 'main'
-        - 'release'
-        - 'test'
-
-jobs:
-  update_profile_active:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Update YAML
-        run: |
-         yq eval '.spring.profiles.active = "dev"' application.yml -i
-         cat application.yml
-
+    branches: ["task_def_ecs"]
     
+jobs:
+  rollback:
+    name: rollback
+    if: ${{ github.event.inputs.Rollback == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Clear Workspace
+        uses: AutoModality/action-clean@v1
+        
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          repository: tradu/emi-user-ms
+          fetch-depth: 0
+
+      - name: Set Environment variables
+        id: env-variables
+        run: |
+          if [[ ${{github.ref}} == "refs/heads/task_def_ecs" ]]; then
+            echo "ENV_NAME=dev" >> $GITHUB_ENV
+            echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+            echo "IMG_TAG=`git rev-parse --short HEAD`" >> $GITHUB_ENV
+            echo "ECS_SERVICE=user-dev-service" >> $GITHUB_ENV
+            echo "ECR_REPO=emi-tradu/emi-user-ms" >> $GITHUB_ENV
+            echo "ECS_CONTAINER=user-dev-service" >> $GITHUB_ENV
+            echo "APP_NAME=emitradudev-user-srv" >> $GITHUB_ENV
+            echo "EB_ENV_NAME=emitradudev-user-srv-env" >> $GITHUB_ENV
+            echo "BUILD_FOLDER=emi-user-ms-dev" >> $GITHUB_ENV
+            echo "EMI_AWS_ACCESS_KEY_ID=${{ secrets.EMITRADU_DEV_AWS_ACCESS_KEY_ID}}" >> $GITHUB_ENV
+            echo "EMI_AWS_SECRET_ACCESS_KEY=${{ secrets.EMITRADU_DEV_AWS_SECRET_ACCESS_KEY}}" >> $GITHUB_ENV
+            echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_DEV_AWS_ROLE_ARN}}" >> $GITHUB_ENV
+          elif [[ ${{github.ref}} == "refs/heads/develop" ]]; then
+            echo "ENV_NAME=dev" >> $GITHUB_ENV
+            echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+            echo "IMG_TAG=`git rev-parse --short HEAD`" >> $GITHUB_ENV
+            echo "APP_NAME=emitradudev-user-srv" >> $GITHUB_ENV
+            echo "EB_ENV_NAME=emitradudev-user-srv-env" >> $GITHUB_ENV
+            echo "BUILD_FOLDER=emi-user-ms-dev" >> $GITHUB_ENV
+            echo "EMI_AWS_ACCESS_KEY_ID=${{ secrets.EMITRADU_DEV_AWS_ACCESS_KEY_ID}}" >> $GITHUB_ENV
+            echo "EMI_AWS_SECRET_ACCESS_KEY=${{ secrets.EMITRADU_DEV_AWS_SECRET_ACCESS_KEY}}" >> $GITHUB_ENV
+            echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_DEV_AWS_ROLE_ARN}}" >> $GITHUB_ENV
+          elif [[ ${{github.ref}} == "refs/heads/release_qa" ]]; then
+            echo "ENV_NAME=qa" >> $GITHUB_ENV
+            echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+            echo "APP_NAME=emitraduqa-user-srv" >> $GITHUB_ENV
+            echo "EB_ENV_NAME=Emitraduqa-user-srv-env" >> $GITHUB_ENV
+            echo "BUILD_FOLDER=emi-user-ms-qa" >> $GITHUB_ENV
+            echo "EMI_AWS_ACCESS_KEY_ID=${{ secrets.EMITRADU_QA_AWS_ACCESS_KEY_ID}}" >> $GITHUB_ENV
+            echo "EMI_AWS_SECRET_ACCESS_KEY=${{ secrets.EMITRADU_QA_AWS_SECRET_ACCESS_KEY}}" >> $GITHUB_ENV
+            echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_QA_AWS_ROLE_ARN}}" >> $GITHUB_ENV
+          elif [[ ${{github.ref}} == "refs/heads/release_uat" ]]; then
+            echo "ENV_NAME=uat" >> $GITHUB_ENV
+            echo "AWS_REGION=eu-central-1" >> $GITHUB_ENV
+            echo "APP_NAME=emitraduuat-user-srv" >> $GITHUB_ENV
+            echo "EB_ENV_NAME=emitraduuat-user-srv-env" >> $GITHUB_ENV
+            echo "BUILD_FOLDER=emi-user-ms-uat" >> $GITHUB_ENV
+            echo "EMI_AWS_ACCESS_KEY_ID=${{ secrets.EMITRADU_UAT_AWS_ACCESS_KEY_ID}}" >> $GITHUB_ENV
+            echo "EMI_AWS_SECRET_ACCESS_KEY=${{ secrets.EMITRADU_UAT_AWS_SECRET_ACCESS_KEY}}" >> $GITHUB_ENV
+            echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_UAT_AWS_ROLE_ARN}}" >> $GITHUB_ENV
+          elif [[ ${{github.ref}} == "refs/heads/main" ]]; then
+            echo "ENV_NAME=prod" >> $GITHUB_ENV
+            echo "AWS_REGION=eu-central-1" >> $GITHUB_ENV
+            echo "APP_NAME=emitraduprod-user-srv" >> $GITHUB_ENV
+            echo "EB_ENV_NAME=emitraduprod-user-srv-env" >> $GITHUB_ENV
+            echo "BUILD_FOLDER=emi-user-ms-prod" >> $GITHUB_ENV
+            echo "EMI_AWS_ACCESS_KEY_ID=${{ secrets.EMITRADU_PROD_AWS_ACCESS_KEY_ID}}" >> $GITHUB_ENV
+            echo "EMI_AWS_SECRET_ACCESS_KEY=${{ secrets.EMITRADU_PROD_AWS_SECRET_ACCESS_KEY}}" >> $GITHUB_ENV
+            echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_PROD_AWS_ROLE_ARN}}" >> $GITHUB_ENV
+          fi
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          # role-session-name: ECR-push
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.ECS_EMITRADU_DEV_AWS_ECR_ROLE_ARN }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: 'true'
+      
+      - name: ROllback 
+        run: |
+          ECRREPO="${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO}}:"
+          IMGTAG=${{ github.event.inputs.Image_tag }}
+          IMGURI="$ECRREPO$IMGTAG"
+          echo "IMGURI=$IMGURI" >> $GITHUB_ENV
+          echo $IMGURI
+          echo "env var ${{ env.IMGURI }}"
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{secrets.ECS_EMITRADU_DEV_AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.ECS_EMITRADU_DEV_AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{env.AWS_REGION}}
+          role-to-assume: ${{secrets.ECS_EMITRADU_DEV_ROLE_ARN}}
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: emi-user-task-def.json
+          container-name: ${{ env.ECS_CONTAINER }}
+          image: ${{ env.IMGURI }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: emi-tradu-dev
+          wait-for-service-stability: true
+
+      - name: Check deployed version 
+        run: |
+          IMG_TASK_DEF=$(aws ecs describe-services --cluster emi-tradu-dev --service ${{ env.ECS_SERVICE }} --query "reverse(sort_by(services, &createdAt))[0].taskDefinition" --region ${{ env.AWS_REGION }} --output text)
+          IMG_RUNNIG=$(aws ecs describe-task-definition --task-definition $IMG_TASK_DEF --query [taskDefinition.containerDefinitions[].image] --region ${{ env.AWS_REGION }} --output text)
+          image=${{ env.IMGURI }}
+            
+            echo "IMG_RUNNIG=$IMG_RUNNIG"
+            echo "image=$image"
+            
+            if [[ "${IMG_RUNNIG}" == "${image}" ]]; then
+                  echo "Deployment Successfull "
+                  
+              else
+                        echo "Deployment failed image does not match "
+                        echo "IMG that is running =$IMG_RUNNIG"
+                        echo "image that we want to deploy =$image"
+                        exit 1
+            fi      
+
+  ci_cd_pipeline:
+    if: ${{ github.event.inputs.Rollback == false }}
+    runs-on: ubuntu-latest
+    permissions:
+     id-token: write
+     contents: read
+    steps:
+      - name: Clear Workspace
+        uses: AutoModality/action-clean@v1
+        
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          repository: tradu/emi-user-ms
+          fetch-depth: 0
+
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          owner: tradu
+          repositories: onboardingemi-actions-shared-library
+          app-id: ${{ secrets.EMITRADU_GITHUB_APP_APPID }}
+          private-key: ${{ secrets.EMITRADU_GITHUB_APP_PRIVATE_KEY }}
+         
+      - name: Checkout SharedLibrary
+        uses: actions/checkout@v3
+        with:
+          repository: tradu/onboardingemi-actions-shared-library
+          ref: develop
+          token: ${{ steps.app-token.outputs.token }}
+          path: sharedlibrary
+          
+      - name: Set Environment variables
+        id: env-variables
+        run: |
+          if [[ ${{github.ref}} == "refs/heads/task_def_ecs" ]]; then
+            echo "ENV_NAME=dev" >> $GITHUB_ENV
+            echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+            echo "IMG_TAG=`git rev-parse --short HEAD`" >> $GITHUB_ENV
+            echo "ECS_SERVICE=user-dev-service" >> $GITHUB_ENV
+            echo "ECR_REPO=emi-tradu/emi-user-ms" >> $GITHUB_ENV
+            echo "ECS_CONTAINER=user-dev-service" >> $GITHUB_ENV
+            echo "FAMILY=user-task-family" >> $GITHUB_ENV
+            echo "CPU=1024" >> $GITHUB_ENV
+            echo "MEMORY=3072" >> $GITHUB_ENV
+            echo "CH_PORT=5000" >> $GITHUB_ENV
+            echo "AWSLOGS_GROUP=/ecs/user-dev-service"
+            echo "ACCOUNT_ID=888210423353"
+            echo "APP_NAME=emitradudev-user-srv" >> $GITHUB_ENV
+            echo "EB_ENV_NAME=emitradudev-user-srv-env" >> $GITHUB_ENV
+            echo "BUILD_FOLDER=emi-user-ms-dev" >> $GITHUB_ENV
+            echo "EMI_AWS_ACCESS_KEY_ID=${{ secrets.EMITRADU_DEV_AWS_ACCESS_KEY_ID}}" >> $GITHUB_ENV
+            echo "EMI_AWS_SECRET_ACCESS_KEY=${{ secrets.EMITRADU_DEV_AWS_SECRET_ACCESS_KEY}}" >> $GITHUB_ENV
+            echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_DEV_AWS_ROLE_ARN}}" >> $GITHUB_ENV
+          elif [[ ${{github.ref}} == "refs/heads/develop" ]]; then
+            echo "ENV_NAME=dev" >> $GITHUB_ENV
+            echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+            echo "IMG_TAG=`git rev-parse --short HEAD`" >> $GITHUB_ENV
+            echo "APP_NAME=emitradudev-user-srv" >> $GITHUB_ENV
+            echo "EB_ENV_NAME=emitradudev-user-srv-env" >> $GITHUB_ENV
+            echo "BUILD_FOLDER=emi-user-ms-dev" >> $GITHUB_ENV
+            echo "EMI_AWS_ACCESS_KEY_ID=${{ secrets.EMITRADU_DEV_AWS_ACCESS_KEY_ID}}" >> $GITHUB_ENV
+            echo "EMI_AWS_SECRET_ACCESS_KEY=${{ secrets.EMITRADU_DEV_AWS_SECRET_ACCESS_KEY}}" >> $GITHUB_ENV
+            echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_DEV_AWS_ROLE_ARN}}" >> $GITHUB_ENV
+          elif [[ ${{github.ref}} == "refs/heads/release_qa" ]]; then
+            echo "ENV_NAME=qa" >> $GITHUB_ENV
+            echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+            echo "APP_NAME=emitraduqa-user-srv" >> $GITHUB_ENV
+            echo "EB_ENV_NAME=Emitraduqa-user-srv-env" >> $GITHUB_ENV
+            echo "BUILD_FOLDER=emi-user-ms-qa" >> $GITHUB_ENV
+            echo "EMI_AWS_ACCESS_KEY_ID=${{ secrets.EMITRADU_QA_AWS_ACCESS_KEY_ID}}" >> $GITHUB_ENV
+            echo "EMI_AWS_SECRET_ACCESS_KEY=${{ secrets.EMITRADU_QA_AWS_SECRET_ACCESS_KEY}}" >> $GITHUB_ENV
+            echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_QA_AWS_ROLE_ARN}}" >> $GITHUB_ENV
+          elif [[ ${{github.ref}} == "refs/heads/release_uat" ]]; then
+            echo "ENV_NAME=uat" >> $GITHUB_ENV
+            echo "AWS_REGION=eu-central-1" >> $GITHUB_ENV
+            echo "APP_NAME=emitraduuat-user-srv" >> $GITHUB_ENV
+            echo "EB_ENV_NAME=emitraduuat-user-srv-env" >> $GITHUB_ENV
+            echo "BUILD_FOLDER=emi-user-ms-uat" >> $GITHUB_ENV
+            echo "EMI_AWS_ACCESS_KEY_ID=${{ secrets.EMITRADU_UAT_AWS_ACCESS_KEY_ID}}" >> $GITHUB_ENV
+            echo "EMI_AWS_SECRET_ACCESS_KEY=${{ secrets.EMITRADU_UAT_AWS_SECRET_ACCESS_KEY}}" >> $GITHUB_ENV
+            echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_UAT_AWS_ROLE_ARN}}" >> $GITHUB_ENV
+          elif [[ ${{github.ref}} == "refs/heads/main" ]]; then
+            echo "ENV_NAME=prod" >> $GITHUB_ENV
+            echo "AWS_REGION=eu-central-1" >> $GITHUB_ENV
+            echo "APP_NAME=emitraduprod-user-srv" >> $GITHUB_ENV
+            echo "EB_ENV_NAME=emitraduprod-user-srv-env" >> $GITHUB_ENV
+            echo "BUILD_FOLDER=emi-user-ms-prod" >> $GITHUB_ENV
+            echo "EMI_AWS_ACCESS_KEY_ID=${{ secrets.EMITRADU_PROD_AWS_ACCESS_KEY_ID}}" >> $GITHUB_ENV
+            echo "EMI_AWS_SECRET_ACCESS_KEY=${{ secrets.EMITRADU_PROD_AWS_SECRET_ACCESS_KEY}}" >> $GITHUB_ENV
+            echo "EMI_AWS_ROLE_TO_ASSUME=${{ secrets.EMITRADU_PROD_AWS_ROLE_ARN}}" >> $GITHUB_ENV
+          fi
+
+      - name: Update ECS Task Definition JSON in place
+        run: |
+          sed -i 's/"family": ".*"/"family": "'"${FAMILY}"'"/' emi-user-task-def.json
+          sed -i 's/"name": ".*"/"name": "'"${CONTAINER_NAME}"'"/' emi-user-task-def.json
+          sed -i 's|"image": ".*"|"image": "'"${ACCOUNT_ID}"'.dkr.ecr.us-east-1.amazonaws.com/'"${REPO_NAME}"'"|' emi-user-task-def.json
+          sed -i 's/"cpu": [0-9]*/"cpu": '"${CPU}"'/' emi-user-task-def.json
+          sed -i 's/"containerPort": [0-9]*/"containerPort": '"${CONTAINER_PORT}"'/' emi-user-task-def.json
+          sed -i 's/"hostPort": [0-9]*/"hostPort": '"${HOST_PORT}"'/' emi-user-task-def.json
+          sed -i 's/"awslogs-group": ".*"/"awslogs-group": "'"${AWSLOGS_GROUP}"'"/' emi-user-task-def.json
+          sed -i 's/"awslogs-region": ".*"/"awslogs-region": "'"${AWSLOGS_REGION}"'"/' emi-user-task-def.json
+          sed -i 's/"cpu": ".*"/"cpu": "'"${CPU}"'"/' emi-user-task-def.json
+          sed -i 's/"memory": ".*"/"memory": "'"${MEMORY}"'"/' emi-user-task-def.json
+          sed -i 's|"executionRoleArn": ".*"|"executionRoleArn": "arn:aws:iam::'"${ACCOUNT_ID}"':role/ecs_task_execution_role"|' emi-user-task-def.json
+          sed -i 's|"taskRoleArn": ".*"|"taskRoleArn": "arn:aws:iam::'"${ACCOUNT_ID}"':role/ecs_task_role"|' emi-user-task-def.json
+
+          cat emi-user-task-def.json
+
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          # role-session-name: ECR-push
+          aws-region: ${{env.AWS_REGION}}
+          role-to-assume: ${{ secrets.ECS_EMITRADU_DEV_AWS_ECR_ROLE_ARN }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: 'true'
+
+      - name: Build application
+        id: build-app
+        shell: bash
+        run: mvn install -DskipTests -Dspring.profiles.active=${{ env.ENV_NAME }}
+   
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ env.IMG_TAG }}
+          REPOSITORY: ${{ env.ECR_REPO }}
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{secrets.ECS_EMITRADU_DEV_AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.ECS_EMITRADU_DEV_AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{env.AWS_REGION}}
+          role-to-assume: ${{secrets.ECS_EMITRADU_DEV_ROLE_ARN}}
+      
+      - name: Install Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+            
+      - name: Install EB CLI using pip
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          pip install awscli
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: emi-user-task-def.json
+          container-name: ${{ env.ECS_CONTAINER }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: emi-tradu-dev
+          wait-for-service-stability: true
+
+      - name: Check deployed version 
+        run: |
+           IMG_TASK_DEF=$(aws ecs describe-services --cluster emi-tradu-dev --service ${{ env.ECS_SERVICE }} --query "reverse(sort_by(services, &createdAt))[0].taskDefinition" --region ${{ env.AWS_REGION }} --output text)
+           IMG_RUNNIG=$(aws ecs describe-task-definition --task-definition $IMG_TASK_DEF --query [taskDefinition.containerDefinitions[].image] --region ${{ env.AWS_REGION }} --output text)
+           image=${{ steps.build-image.outputs.image }}
+            
+            echo "IMG_RUNNIG=$IMG_RUNNIG"
+            echo "image=$image"
+            
+            if [[ "${IMG_RUNNIG}" == "${image}" ]]; then
+                  echo "Deployment Successfull "
+                  
+              else
+                        echo "Deployment failed image does not match "
+                        echo "IMG that is running =$IMG_RUNNIG"
+                        echo "image that we want to deploy =$image"
+                        exit 1
+            fi      
+
+
+      # - name: SonarQube Analysis
+      #   uses: tradu/onboardingemi-actions-shared-library/.github/actions/ebs-sonar/@develop
+      #   with:
+      #     CACERTS_TRUSTSTORE_PWD: ${{ secrets.CACERTS_TRUSTSTORE_PWD }}
+      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      #     SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+      #     SONAR_PROJECT_NAME: ${{ secrets.SONAR_PROJECT_NAME }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     MAVEN_USERNAME: ${{ secrets.EMITRADU_REPO_PUBLISHER_USERNAME}}
+      #     MAVEN_PASSWORD: ${{ secrets.EMITRADU_REPO_PUBLISHER_PASSWORD}}
+      #   if: github.ref == 'refs/heads/develop'
+          
+      # - name: EBS Build
+      #   uses: tradu/onboardingemi-actions-shared-library/.github/actions/ebs-build/@develop
+      #   with:
+      #     MAVEN_USERNAME: ${{ secrets.EMITRADU_REPO_PUBLISHER_USERNAME}}
+      #     MAVEN_PASSWORD: ${{ secrets.EMITRADU_REPO_PUBLISHER_PASSWORD}}
+      #     AWS_ACCESS_KEY_ID: ${{ env.EMI_AWS_ACCESS_KEY_ID}}
+      #     AWS_SECRET_ACCESS_KEY: ${{ env.EMI_AWS_SECRET_ACCESS_KEY}}
+      #     role-to-assume: ${{ env.EMI_AWS_ROLE_TO_ASSUME}}
+  
+      # - name: EBS Deploy
+      #   uses: tradu/onboardingemi-actions-shared-library/.github/actions/ebs-deploy/@develop
+      #   with:
+      #     AWS_ACCESS_KEY_ID: ${{ env.EMI_AWS_ACCESS_KEY_ID}}
+      #     AWS_SECRET_ACCESS_KEY: ${{ env.EMI_AWS_SECRET_ACCESS_KEY}}
+      #     role-to-assume: ${{ env.EMI_AWS_ROLE_TO_ASSUME}}
+
 
 
   
