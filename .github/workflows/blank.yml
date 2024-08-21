@@ -366,9 +366,9 @@ jobs:
             echo "ECR_REPO=emi-tradu/emi-user-ms" >> $GITHUB_ENV
             echo "ECS_CONTAINER=user-dev-service" >> $GITHUB_ENV
             echo "FAMILY=user-task-family" >> $GITHUB_ENV
-            echo "CPU=1024" >> $GITHUB_ENV
-            echo "MEMORY=3072" >> $GITHUB_ENV
-            echo "CH_PORT=5000" >> $GITHUB_ENV
+            echo "CPU=10240" >> $GITHUB_ENV
+            echo "MEMORY=30720" >> $GITHUB_ENV
+            echo "CH_PORT=50000" >> $GITHUB_ENV
             echo "AWSLOGS_GROUP=/ecs/user-dev-service" >> $GITHUB_ENV
             echo "ACCOUNT_ID=888210423353" >> $GITHUB_ENV
             echo "APP_NAME=emitradudev-user-srv" >> $GITHUB_ENV
